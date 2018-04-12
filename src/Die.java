@@ -1,6 +1,5 @@
 import java.awt.*;
 
-import static java.lang.Math.random;
 
 public class Die
 {

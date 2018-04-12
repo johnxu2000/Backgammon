@@ -1,9 +1,23 @@
-import javax.swing.*;
 
-public class GameForm {
+
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+
+public class GameForm{
     private JPanel gamePanel;
+    private JPanel backgammonPanel;
     private JPanel menuPanel;
-    private JPanel Board;
+    private JButton roll;
+
+    public GameForm(){
+        roll.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                ((Board) gamePanel).rollDice1();
+                ((Board) gamePanel).rollDice2();
+            }
+        });
+    }
 
     public static void main(String[] args){
         JFrame frame = new JFrame("");
@@ -16,7 +30,9 @@ public class GameForm {
     }
 
     private void createUIComponents() {
-        gamePanel = new Board();
         // TODO: place custom component creation code here
+        gamePanel = new Board();
+
+
     }
 }
