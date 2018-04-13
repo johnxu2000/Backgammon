@@ -12,7 +12,8 @@ public class GameForm{
 
     public GameForm(){
         roll.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 ((Board) gamePanel).rollDice1();
                 ((Board) gamePanel).rollDice2();
             }
@@ -22,11 +23,11 @@ public class GameForm{
     public static void main(String[] args){
         JFrame frame = new JFrame("");
         GameForm form = new GameForm();
-        frame.add(form.gamePanel);
+        frame.add(form.backgammonPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setResizable(false);
+        frame.setPreferredSize(new Dimension(800, 600));
     }
 
     private void createUIComponents() {
