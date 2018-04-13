@@ -44,6 +44,9 @@ public class Board extends JPanel {
         g.setColor(new Color(139,69,19));
         g.fillRect(100, 50, 50, 400);
         g.fillRect(650, 50, 50, 400);
+        g.setColor(Color.gray);
+        g.fillRect(100, 240, 50, 20);
+        g.fillRect(650, 240, 50, 20);
         dice1.draw(g);
         dice2.draw(g);
     }
