@@ -18,6 +18,7 @@ public class Die
     {
         Graphics2D g2d = (Graphics2D) page;
         Font font = new Font("Arial", Font.PLAIN, 100);
+        g2d.setColor(Color.white);
         g2d.setFont(font);
 
         g2d.drawString(getStringFaceValue(), upperX, upperY);
