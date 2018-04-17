@@ -1,9 +1,15 @@
 import java.awt.*;
 
 public class Piece {
-    public Piece(){
-    }
-    public void draw(){
+    int x,y;
+    Color colour;
 
+    public Piece(int x, int y, Color colour){
+        this.x = x;
+        this.y = y;
+        this.colour = colour;
+    }
+    public void draw(Graphics g){
+        g.fillOval(x,y,30,30);
     }
 }
