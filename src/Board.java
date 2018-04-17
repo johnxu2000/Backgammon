@@ -20,7 +20,7 @@ public class Board extends JPanel {
         y2 = 450;
         y3 = 270;
         for(int i = 0; i < 2; i++){
-            for(int z = 0; z < 10; z++){
+            for(int z = 0; z < 12; z++){
                 if((z%2 == 0 && i%2 == 0) || (i%2 != 0 && z%2 != 0)){
                     g.setColor(Color.red);
                 }
