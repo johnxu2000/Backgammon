@@ -17,7 +17,7 @@ public class Die
     public void draw(Graphics page)
     {
         Graphics2D g2d = (Graphics2D) page;
-        Font font = new Font("Arial", Font.PLAIN, 100);
+        Font font = new Font("TimesRoman", Font.PLAIN, 100);
         g2d.setColor(Color.white);
         g2d.setFont(font);
 
