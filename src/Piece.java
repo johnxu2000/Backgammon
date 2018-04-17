@@ -10,6 +10,5 @@ public class Piece {
         this.colour = colour;
     }
     public void draw(Graphics g){
-        g.fillOval(x,y,30,30);
     }
 }
