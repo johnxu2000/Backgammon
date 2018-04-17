@@ -11,11 +11,11 @@ public class Board extends JPanel {
         setBackground(Color.black);
         g.setColor(Color.GRAY);
         super.paintComponent(g);
-        g.fillRect(100, 50, 800, 400);
+        g.fillRect(100, 50, 700, 400);
         g.setColor(Color.white);
-        x1 = 650;
-        x2 = 600;
-        x3 = 625;
+        x1 = 750;
+        x2 = 700;
+        x3 = 725;
         y1 = 450;
         y2 = 450;
         y3 = 270;
@@ -34,19 +34,19 @@ public class Board extends JPanel {
                 x2 -= 50;
                 x3 -= 50;
             }
-            x1 += 500;
-            x2 += 500;
-            x3 += 500;
+            x1 += 600;
+            x2 += 600;
+            x3 += 600;
             y1 -= 400;
             y2 -= 400;
             y3 -= 40;
         }
         g.setColor(new Color(139,69,19));
         g.fillRect(100, 50, 50, 400);
-        g.fillRect(650, 50, 50, 400);
+        g.fillRect(750, 50, 50, 400);
         g.setColor(Color.gray);
         g.fillRect(100, 240, 50, 20);
-        g.fillRect(650, 240, 50, 20);
+        g.fillRect(750, 240, 50, 20);
         dice1.draw(g);
         dice2.draw(g);
     }
