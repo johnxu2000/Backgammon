@@ -1,20 +1,26 @@
 import java.awt.*;
-import java.util.Stack;
-
 public class Player {
     Color colourOfPieces;
-    Stack[] stacks;
+    Piece[] pieces;
     public Player(Color colourOfPieces, int startingX, int startingY){
         this.colourOfPieces = colourOfPieces;
-        stacks = new Stack[24];
-        for(int i = 0; i<24; i++){
-            stacks[i] = new Stack();
-            stacks[i].push(new Piece(600, 400; colourOfPieces));
+        pieces = new Piece[15];
+        for(int i = 0; i < 15; i++){
+            if(i == 2){
+                startingX -= 550;
+            }
+            if(i == 7){
+                startingX += 200;
+            }
+            if(i == 10){
+                startingX += 100;
+            }
+            pieces[i] = new Piece(startingX, startingY, colourOfPieces);
         }
     }
 
-    public Stack[] getStacks(){
-        return stacks;
+    public Piece[] getPieces(){
+        return pieces;
     }
 
 
