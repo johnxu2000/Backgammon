@@ -5,6 +5,8 @@ public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
+    Player player1 = new Player(Color.white);
+    Player player2 = new Player(Color.black);
     public Board(){
     }
     public void paintComponent(Graphics g){

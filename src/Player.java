@@ -4,8 +4,10 @@ public class Player {
     Color colourOfPieces;
     public Player(Color colourOfPieces){
         this.colourOfPieces = colourOfPieces;
-        int [] pieces = new int[15];
+        colourOfPieces = Color.blue;
+        Object [] pieces = new Object[15];
         for(int i = 0; i<5; i++){
+            pieces [i] = new Piece(300,30,colourOfPieces);
         }
     }
 
