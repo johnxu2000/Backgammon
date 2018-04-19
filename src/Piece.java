@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.*;
 
 public class Piece {
     int x,y;

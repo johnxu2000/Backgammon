@@ -2,13 +2,18 @@ import java.awt.*;
 
 public class Player {
     Color colourOfPieces;
-    public Player(Color colourOfPieces){
+    Piece [] pieces;
+    public Player(Color colourOfPieces, int startingX, int startingY){
         this.colourOfPieces = colourOfPieces;
-        colourOfPieces = Color.blue;
-        Object [] pieces = new Object[15];
-        for(int i = 0; i<5; i++){
-            pieces [i] = new Piece(300,30,colourOfPieces);
+        pieces = new Piece[15];
+        for(int i = 0; i<pieces.length; i++){
+            pieces[i] = new Piece(startingX, startingY, colourOfPieces);
         }
     }
+
+    public Piece[] getPieces(){
+        return pieces;
+    }
+
 
 }

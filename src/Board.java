@@ -5,9 +5,10 @@ public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
-    Player player1 = new Player(Color.white);
-    Player player2 = new Player(Color.black);
+    Player player1, player2;
     public Board(){
+        player1 = new Player(Color.orange, 400, 600);
+        player2 = new Player(Color.white, 100, 600);
     }
     public void paintComponent(Graphics g){
         setBackground(Color.black);
@@ -51,6 +52,11 @@ public class Board extends JPanel {
         g.fillRect(750, 240, 50, 20);
         dice1.draw(g);
         dice2.draw(g);
+
+        for(int i = 0; i < player1.getPieces().length; i++){
+            player1.getPieces()[i].draw(g);
+            player2.getPieces()[i].draw(g);
+        }
     }
 
     public void rollDice1(){
