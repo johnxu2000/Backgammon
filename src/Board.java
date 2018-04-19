@@ -6,6 +6,7 @@ public class Board extends JPanel {
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
     Player player1, player2;
+    GameLogic gameLogic = new GameLogic();
     public Board(){
         player1 = new Player(Color.orange, 710, 55);
         player2 = new Player(Color.black, 710, 415);
