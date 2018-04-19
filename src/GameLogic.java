@@ -7,16 +7,8 @@ public class GameLogic {
             stacks[i] = new Stack();
         }
     }
-    public void pushPiece(){
-
-    }
-    public void popPiece(){
-
-    }
-    public void checkPiece(){
-
-    }
-    public void checkEmpty(){
-
-    }
+    public Stack[] getStacks(){
+            return stacks;
+        }
 }
+
