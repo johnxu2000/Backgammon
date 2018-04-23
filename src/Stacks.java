@@ -1,8 +1,8 @@
 import java.util.Stack;
 
-public class GameLogic {
+public class Stacks {
     Stack[] stacks = new Stack[24];
-    public GameLogic() {
+    public Stacks() {
         for (int i = 0; i < 24; i++) {
             stacks[i] = new Stack();
         }

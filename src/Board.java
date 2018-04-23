@@ -1,36 +1,33 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Stack;
 
 public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
     Player player1, player2;
-    GameLogic gameLogic = new GameLogic();
+    Stacks stacks = new Stacks();
     public Board(){
         int starting1Y = 20;
         int starting2Y = 445;
         player1 = new Player(Color.orange, 710, starting1Y);
         player2 = new Player(Color.black, 710, starting2Y);
         for(int i = 0; i < 2; i++) {
-            gameLogic.getStacks()[23].push(player1.getPieces()[i]);
-            gameLogic.getStacks()[0].push(player2.getPieces()[i]);
+            stacks.getStacks()[23].push(player1.getPieces()[i]);
+            stacks.getStacks()[0].push(player2.getPieces()[i]);
 
         }
         for(int i = 2; i < 7; i++) {
-            gameLogic.getStacks()[11].push(player2.getPieces()[i]);
-            gameLogic.getStacks()[12].push(player1.getPieces()[i]);
+            stacks.getStacks()[11].push(player2.getPieces()[i]);
+            stacks.getStacks()[12].push(player1.getPieces()[i]);
         }
         for(int i = 7; i < 10; i++) {
-            gameLogic.getStacks()[16].push(player2.getPieces()[i]);
-            gameLogic.getStacks()[7].push(player1.getPieces()[i]);
+            stacks.getStacks()[16].push(player2.getPieces()[i]);
+            stacks.getStacks()[7].push(player1.getPieces()[i]);
         }
-        //starting2Y = 20;
-        //starting1Y = 445;
         for(int i = 10; i < 15; i++) {
-            gameLogic.getStacks()[6].push(player1.getPieces()[i]);
-            gameLogic.getStacks()[17].push(player2.getPieces()[i]);
+            stacks.getStacks()[6].push(player1.getPieces()[i]);
+            stacks.getStacks()[17].push(player2.getPieces()[i]);
         }
 
         for(int i = 0; i < 24; i++){
@@ -38,8 +35,8 @@ public class Board extends JPanel {
                 starting1Y = 20;
             else
                 starting1Y = 445;
-            for(int z = 0; z < gameLogic.getStacks()[i].size(); z++){
-                Piece p = (Piece)gameLogic.getStacks()[i].get(z);
+            for(int z = 0; z < stacks.getStacks()[i].size(); z++){
+                Piece p = (Piece) stacks.getStacks()[i].get(z);
                 if(i > 11)
                     p.setY(starting1Y += 30);
                 else
