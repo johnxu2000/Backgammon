@@ -43,7 +43,7 @@ public class Board extends JPanel {
                 if(i > 11)
                     p.setY(starting1Y += 30);
                 else
-                    p.setY(starting1Y -=30);
+                    p.setY(starting1Y -=31);
 
             }
         }
