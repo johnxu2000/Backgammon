@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Stack;
 
 public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
@@ -8,9 +9,47 @@ public class Board extends JPanel {
     Player player1, player2;
     GameLogic gameLogic = new GameLogic();
     public Board(){
-        player1 = new Player(Color.orange, 710, 55);
-        player2 = new Player(Color.black, 710, 415);
+        int starting1Y = 20;
+        int starting2Y = 445;
+        player1 = new Player(Color.orange, 710, starting1Y);
+        player2 = new Player(Color.black, 710, starting2Y);
+        for(int i = 0; i < 2; i++) {
+            gameLogic.getStacks()[23].push(player1.getPieces()[i]);
+            gameLogic.getStacks()[0].push(player2.getPieces()[i]);
+
+        }
+        for(int i = 2; i < 7; i++) {
+            gameLogic.getStacks()[11].push(player2.getPieces()[i]);
+            gameLogic.getStacks()[12].push(player1.getPieces()[i]);
+        }
+        for(int i = 7; i < 10; i++) {
+            gameLogic.getStacks()[16].push(player2.getPieces()[i]);
+            gameLogic.getStacks()[7].push(player1.getPieces()[i]);
+        }
+        //starting2Y = 20;
+        //starting1Y = 445;
+        for(int i = 10; i < 15; i++) {
+            gameLogic.getStacks()[6].push(player1.getPieces()[i]);
+            gameLogic.getStacks()[17].push(player2.getPieces()[i]);
+        }
+
+        for(int i = 0; i < 24; i++){
+            if(i > 11)
+                starting1Y = 20;
+            else
+                starting1Y = 445;
+            for(int z = 0; z < gameLogic.getStacks()[i].size(); z++){
+                Piece p = (Piece)gameLogic.getStacks()[i].get(z);
+                if(i > 11)
+                    p.setY(starting1Y += 30);
+                else
+                    p.setY(starting1Y -=30);
+
+            }
+        }
+
     }
+
     public void paintComponent(Graphics g){
         setBackground(Color.black);
         g.setColor(Color.GRAY);
@@ -53,6 +92,8 @@ public class Board extends JPanel {
         g.fillRect(750, 240, 50, 20);
         dice1.draw(g);
         dice2.draw(g);
+        g.setColor(Color.black);
+        g.drawLine(450, 20, 450, 450);
 
         for(int i = 0; i < player1.getPieces().length; i++){
             player1.getPieces()[i].draw(g);
