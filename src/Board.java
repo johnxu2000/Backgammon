@@ -6,11 +6,47 @@ public class Board extends JPanel {
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
     Player player1, player2;
-    GameLogic gameLogic = new GameLogic();
+    Stacks stacks = new Stacks();
     public Board(){
-        player1 = new Player(Color.orange, 400, 400);
-        player2 = new Player(Color.black, 100, 400);
+        int starting1Y = 20;
+        int starting2Y = 445;
+        player1 = new Player(Color.orange, 710, starting1Y);
+        player2 = new Player(Color.black, 710, starting2Y);
+        for(int i = 0; i < 2; i++) {
+            stacks.getStacks()[23].push(player1.getPieces()[i]);
+            stacks.getStacks()[0].push(player2.getPieces()[i]);
+
+        }
+        for(int i = 2; i < 7; i++) {
+            stacks.getStacks()[11].push(player2.getPieces()[i]);
+            stacks.getStacks()[12].push(player1.getPieces()[i]);
+        }
+        for(int i = 7; i < 10; i++) {
+            stacks.getStacks()[16].push(player2.getPieces()[i]);
+            stacks.getStacks()[7].push(player1.getPieces()[i]);
+        }
+        for(int i = 10; i < 15; i++) {
+            stacks.getStacks()[6].push(player1.getPieces()[i]);
+            stacks.getStacks()[17].push(player2.getPieces()[i]);
+        }
+
+        for(int i = 0; i < 24; i++){
+            if(i > 11)
+                starting1Y = 20;
+            else
+                starting1Y = 445;
+            for(int z = 0; z < stacks.getStacks()[i].size(); z++){
+                Piece p = (Piece) stacks.getStacks()[i].get(z);
+                if(i > 11)
+                    p.setY(starting1Y += 30);
+                else
+                    p.setY(starting1Y -=30);
+
+            }
+        }
+
     }
+
     public void paintComponent(Graphics g){
         setBackground(Color.black);
         g.setColor(Color.GRAY);
@@ -53,6 +89,8 @@ public class Board extends JPanel {
         g.fillRect(750, 240, 50, 20);
         dice1.draw(g);
         dice2.draw(g);
+        g.setColor(Color.black);
+        g.drawLine(450, 20, 450, 450);
 
         for(int i = 0; i < player1.getPieces().length; i++){
             player1.getPieces()[i].draw(g);
