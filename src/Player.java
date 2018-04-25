@@ -16,7 +16,7 @@ public class Player {
             if(i == 10){
                 startingX += 100;
             }
-            pieces[i] = new Piece(startingX, startingY, colourOfPieces);
+            pieces[i] = new Piece(startingX, startingY, i, colourOfPieces);
         }
 
     }
