@@ -44,7 +44,7 @@ public class Board extends JPanel {
 
             }
         }
-
+        checkBoard();
     }
 
     public void paintComponent(Graphics g){
@@ -105,5 +105,11 @@ public class Board extends JPanel {
     public void rollDice2(){
         dice2.roll();
         repaint();
+    }
+    public void checkBoard(){
+        for (int i = 0; i < 24; i++ )
+            if (!stacks.getStacks()[i].isEmpty()) {
+                System.out.println("Coordinate " + i + " is empty.");
+            }
     }
 }
