@@ -9,6 +9,7 @@ public class Board extends JPanel {
     Stacks stacks = new Stacks();
     Piece removedPiece, addPiece;
     int starting1Y, starting2Y;
+    int turn = 1;
     public Board(){
         starting1Y = 20;
         starting2Y = 445;
@@ -138,10 +139,20 @@ public class Board extends JPanel {
                 System.out.println("hi");
                 removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                 addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
-                player2.movePiece(initialSpot, finalSpot, removedPiece);
+                if(turn == 2){
+                    player2.movePiece(initialSpot, finalSpot, removedPiece);
+                    turn = 1;
+                }
+                else{
+                    player1.movePiece(initialSpot, finalSpot, removedPiece);
+                    turn = 2;
+                }
                 repaint();
                 return true;
             }
+        }
+        else{
+            return  false;
         }
     }
 }
