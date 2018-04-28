@@ -7,9 +7,11 @@ public class Board extends JPanel {
     Die dice2 = new Die(410, 540);
     Player player1, player2;
     Stacks stacks = new Stacks();
+    Piece removedPiece, addPiece;
+    int starting1Y, starting2Y;
     public Board(){
-        int starting1Y = 20;
-        int starting2Y = 445;
+        starting1Y = 20;
+        starting2Y = 445;
         player1 = new Player(Color.orange, 710, starting1Y);
         player2 = new Player(Color.black, 710, starting2Y);
         for(int i = 0; i < 2; i++) {
@@ -26,7 +28,7 @@ public class Board extends JPanel {
             stacks.getStacks()[7].push(player1.getPieces()[i]);
         }
         for(int i = 10; i < 15; i++) {
-            stacks.getStacks()[6].push(player1.getPieces()[i]);
+            stacks.getStacks()[5].push(player1.getPieces()[i]);
             stacks.getStacks()[17].push(player2.getPieces()[i]);
         }
 
@@ -51,6 +53,20 @@ public class Board extends JPanel {
         setBackground(Color.black);
         g.setColor(Color.GRAY);
         super.paintComponent(g);
+        for(int i = 0; i < 24; i++){
+            if(i > 11)
+                starting1Y = 20;
+            else
+                starting1Y = 445;
+            for(int z = 0; z < stacks.getStacks()[i].size(); z++){
+                Piece p = (Piece) stacks.getStacks()[i].get(z);
+                if(i > 11)
+                    p.setY(starting1Y += 30);
+                else
+                    p.setY(starting1Y -=30);
+
+            }
+        }
         g.fillRect(100, 50, 700, 400);
         g.setColor(Color.white);
         x1 = 750;
@@ -111,5 +127,21 @@ public class Board extends JPanel {
             if (!stacks.getStacks()[i].isEmpty()) {
                 System.out.println("Coordinate " + i + " is empty.");
             }
+    }
+
+    public boolean selectedStack(int initialSpot, int finalSpot){
+        if(finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue()){
+            if(stacks.getStacks()[initialSpot].isEmpty()){
+                return false;
+            }
+            else {
+                System.out.println("hi");
+                removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
+                addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
+                player2.movePiece(initialSpot, finalSpot, removedPiece);
+                repaint();
+                return true;
+            }
+        }
     }
 }

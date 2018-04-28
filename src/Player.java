@@ -21,6 +21,10 @@ public class Player {
 
     }
 
+    public void movePiece(int pieceInitialSpot, int pieceFinalSpot, Piece piece){
+        piece.setX(piece.getX() + ((pieceFinalSpot - pieceInitialSpot) * -50));
+    }
+
     public Piece[] getPieces(){
         return pieces;
     }

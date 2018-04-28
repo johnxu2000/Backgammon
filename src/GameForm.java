@@ -9,6 +9,10 @@ public class GameForm{
     private JPanel backgammonPanel;
     private JPanel menuPanel;
     private JButton roll;
+    int numClicks = 0;
+    int startingStack, endingStack;
+    boolean canMove = false;
+    boolean move;
 
     public GameForm(){
         roll.addActionListener(new ActionListener(){
@@ -16,12 +20,59 @@ public class GameForm{
             public void actionPerformed(ActionEvent e) {
                 ((Board) gamePanel).rollDice1();
                 ((Board) gamePanel).rollDice2();
+                canMove = true;
+
             }
         });
         gamePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+                if(canMove) {
+                    super.mouseClicked(e);
+                    int boundaryX = 750;
+                    int boundaryX2 = 700;
+                    int boundaryY = 265;
+                    int boundaryY2 = 450;
+                    for (int i = 0; i < 24; i++) {
+                        if (e.getX() < boundaryX && e.getX() > boundaryX2) {
+                            if (i < 12 && boundaryY < e.getY() && e.getY() < boundaryY2) {
+                                numClicks++;
+                                if (numClicks == 2) {
+                                    endingStack = i;
+                                    if(((Board) gamePanel).selectedStack(startingStack, endingStack)){
+                                        canMove = false;
+                                    }
+                                    numClicks = 0;
+                                } else {
+                                    startingStack = i;
+                                }
+                                break;
+                            } else if (i >= 12 && boundaryY > e.getY() && e.getY() > boundaryY2) {
+                                numClicks++;
+                                if (numClicks == 2) {
+                                    endingStack = i;
+                                    if(((Board) gamePanel).selectedStack(startingStack, endingStack)){
+                                        canMove = false;
+                                    }
+                                    numClicks = 0;
+                                } else {
+                                    startingStack = i;
+                                }
+                                break;
+                            }
+                        }
+                        if (i < 11) {
+                            boundaryX -= 50;
+                            boundaryX2 -= 50;
+                        } else if (i == 11) {
+                            boundaryY -= 30;
+                            boundaryY2 -= 400;
+                        } else {
+                            boundaryX += 50;
+                            boundaryX2 += 50;
+                        }
+                    }
+                }
             }
 
             @Override
