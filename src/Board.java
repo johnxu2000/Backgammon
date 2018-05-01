@@ -11,6 +11,8 @@ public class Board extends JPanel {
     Piece removedPiece, addPiece;
     int startingY, startingX;
     int turn = 1;
+    boolean p1Victory = false;
+    boolean p2Victory = false;
     public Board(){
         player1 = new Player(Color.orange, startingX, startingY);
         player2 = new Player(Color.black, startingX, startingY);
@@ -124,20 +126,19 @@ public class Board extends JPanel {
         repaint();
     }
     public void checkBoard() {
-        boolean p1Victory = false;
-        boolean p2Victory = false;
-        for (int i = 0; i < 24; i++) {
-            if (stacks.getStacks()[i].isEmpty()) {
-                System.out.println("Coordinate " + i + " is empty.");
-            } else if (stacks.getStacks()[i].peek() == player1) {
-                System.out.println("Coordinate " + i + " contains p1 pieces");
-                p1Victory = false;
-            } else if (stacks.getStacks()[i].peek() == player2) {
-                System.out.println("Coordinate " + i + " contains p2 pieces");
-                p2Victory = false;
+        while(!p1Victory && !p2Victory) {
+            for (int i = 0; i < 24; i++) {
+                if (stacks.getStacks()[i].isEmpty()) {
+                    System.out.println("Coordinate " + i + " is empty.");
+                } else if (stacks.getStacks()[i].peek() == player1) {
+                    System.out.println("Coordinate " + i + " contains p1 pieces");
+                    p1Victory = false;
+                } else if (stacks.getStacks()[i].peek() == player2) {
+                    System.out.println("Coordinate " + i + " contains p2 pieces");
+                    p2Victory = false;
+                } else p1Victory = true; p2Victory = true;
             }
         }
-
     }
 
     public boolean selectedStack(int initialSpot, int finalSpot){

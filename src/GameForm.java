@@ -91,10 +91,9 @@ public class GameForm{
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
                 Object source = e.getSource();
-                if (source instanceof JButton) {
-                    System.out.println("Mouse is over a JButton");
+                if (source instanceof Piece) {
+                    System.out.println("Mouse is over a Piece");
                 }
-                System.out.println("Mouse is over "+ e.getComponent().getClass().getName());
             }
 
             @Override
