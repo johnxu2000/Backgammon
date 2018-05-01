@@ -130,7 +130,7 @@ public class Board extends JPanel {
     }
 
     public boolean selectedStack(int initialSpot, int finalSpot){
-        if(finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue()){
+        if(finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())){
             if(stacks.getStacks()[initialSpot].isEmpty()){
                 return false;
             }

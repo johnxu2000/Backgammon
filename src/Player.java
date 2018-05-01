@@ -3,6 +3,7 @@ import java.awt.*;
 public class Player {
     Color colourOfPieces;
     Piece[] pieces;
+    boolean pieceOnBoard = true;
     public Player(Color colourOfPieces, int startingX, int startingY){
         this.colourOfPieces = colourOfPieces;
         pieces = new Piece[15];
@@ -16,7 +17,7 @@ public class Player {
             if(i == 10){
                 startingX += 100;
             }
-            pieces[i] = new Piece(startingX, startingY, i, colourOfPieces);
+            pieces[i] = new Piece(startingX, startingY, i, pieceOnBoard, colourOfPieces);
         }
 
     }
