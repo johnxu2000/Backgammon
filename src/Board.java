@@ -10,6 +10,8 @@ public class Board extends JPanel {
     Stacks stacks = new Stacks();
     Piece removedPiece, addPiece;
     int startingY, startingX;
+    int xOutlinedPiece, yOutlinedPiece;
+    boolean outlinePiece = false;
     int turn = 1;
     public Board(){
         player1 = new Player(Color.orange, startingX, startingY);
@@ -113,6 +115,10 @@ public class Board extends JPanel {
             player1.getPieces()[i].draw(g);
             player2.getPieces()[i].draw(g);
         }
+        g.setColor(Color.green);
+        if(outlinePiece){
+            g.drawOval(xOutlinedPiece, yOutlinedPiece, 30, 30);
+        }
     }
 
     public void rollDice1(){
@@ -169,5 +175,32 @@ public class Board extends JPanel {
             }
         }
         return moveStatus;
+    }
+
+    public void selectedPiece(int initialSpot){
+        Piece topOfStack = (Piece)stacks.getStacks()[initialSpot].peek();
+        if(!stacks.getStacks()[initialSpot].isEmpty()) {
+            if (turn == 1) {
+                if (topOfStack == player1.movePieceCheck(topOfStack)) {
+                    xOutlinedPiece = topOfStack.getX();
+                    yOutlinedPiece = topOfStack.getY();
+                    outlinePiece = true;
+                    repaint();
+
+                }
+            }
+            if (turn == 2) {
+                if (topOfStack == player2.movePieceCheck(topOfStack)) {
+                    xOutlinedPiece = topOfStack.getX();
+                    yOutlinedPiece = topOfStack.getY();
+                    outlinePiece = true;
+                    repaint();
+                }
+            }
+        }
+    }
+
+    public void setOutlinedPiece(){
+        outlinePiece = false;
     }
 }

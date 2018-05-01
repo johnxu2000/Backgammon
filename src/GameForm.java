@@ -42,10 +42,12 @@ public class GameForm{
                                     endingStack = i;
                                     if(((Board) gamePanel).selectedStack(startingStack, endingStack)){
                                         canMove = false;
+                                        ((Board) gamePanel).setOutlinedPiece();
                                     }
                                     numClicks = 0;
                                 } else {
                                     startingStack = i;
+                                    ((Board) gamePanel).selectedPiece(startingStack);
                                 }
                                 break;
                             } else if (i >= 12 && boundaryY > e.getY() && e.getY() > boundaryY2) {
@@ -54,10 +56,13 @@ public class GameForm{
                                     endingStack = i;
                                     if(((Board) gamePanel).selectedStack(startingStack, endingStack)){
                                         canMove = false;
+                                        ((Board) gamePanel).setOutlinedPiece();
+
                                     }
                                     numClicks = 0;
                                 } else {
                                     startingStack = i;
+                                    ((Board) gamePanel).selectedPiece(startingStack);
                                 }
                                 break;
                             }
