@@ -3,9 +3,11 @@ import java.util.*;
 
 public class Piece {
     int x,y, pieceNumber;
+    boolean status;
     Color colour;
 
-    public Piece(int x, int y, int pieceNumber, Color colour){
+    public Piece(int x, int y, int pieceNumber, boolean status, Color colour){
+        this.status = status;
         this.x = x;
         this.y = y;
         this.pieceNumber = pieceNumber;
@@ -17,6 +19,10 @@ public class Piece {
     }
     public int getPieceNumber(){
         return pieceNumber;
+    }
+
+    public boolean getStatus(){
+        return status;
     }
 
     public void setX(int x) {

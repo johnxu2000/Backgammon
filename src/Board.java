@@ -8,13 +8,11 @@ public class Board extends JPanel {
     Player player1, player2;
     Stacks stacks = new Stacks();
     Piece removedPiece, addPiece;
-    int starting1Y, starting2Y;
+    int startingY, startingX;
     int turn = 1;
     public Board(){
-        starting1Y = 20;
-        starting2Y = 445;
-        player1 = new Player(Color.orange, 710, starting1Y);
-        player2 = new Player(Color.black, 710, starting2Y);
+        player1 = new Player(Color.orange, startingX, startingY);
+        player2 = new Player(Color.black, startingX, startingY);
         for(int i = 0; i < 2; i++) {
             stacks.getStacks()[23].push(player1.getPieces()[i]);
             stacks.getStacks()[0].push(player2.getPieces()[i]);
@@ -30,22 +28,7 @@ public class Board extends JPanel {
         }
         for(int i = 10; i < 15; i++) {
             stacks.getStacks()[5].push(player1.getPieces()[i]);
-            stacks.getStacks()[17].push(player2.getPieces()[i]);
-        }
-
-        for(int i = 0; i < 24; i++){
-            if(i > 11)
-                starting1Y = 20;
-            else
-                starting1Y = 445;
-            for(int z = 0; z < stacks.getStacks()[i].size(); z++){
-                Piece p = (Piece) stacks.getStacks()[i].get(z);
-                if(i > 11)
-                    p.setY(starting1Y += 30);
-                else
-                    p.setY(starting1Y -=30);
-
-            }
+            stacks.getStacks()[18].push(player2.getPieces()[i]);
         }
         checkBoard();
     }
@@ -54,18 +37,34 @@ public class Board extends JPanel {
         setBackground(Color.black);
         g.setColor(Color.GRAY);
         super.paintComponent(g);
+        startingX = 710;
         for(int i = 0; i < 24; i++){
-            if(i > 11)
-                starting1Y = 20;
-            else
-                starting1Y = 445;
+            if(i > 11) {
+                startingY = 20;
+            }
+            else {
+                startingY = 445;
+            }
             for(int z = 0; z < stacks.getStacks()[i].size(); z++){
                 Piece p = (Piece) stacks.getStacks()[i].get(z);
-                if(i > 11)
-                    p.setY(starting1Y += 30);
-                else
-                    p.setY(starting1Y -=30);
+                if(i > 11) {
+                    p.setY(startingY += 30);
+                    p.setX(startingX);
+                }
+                else {
+                    p.setY(startingY -= 30);
+                    p.setX(startingX);
+                }
 
+            }
+            if(i > 11) {
+                startingX += 50;
+            }
+            else if (i == 11){
+
+            }
+            else {
+                startingX -= 50;
             }
         }
         g.fillRect(100, 50, 700, 400);
@@ -135,8 +134,7 @@ public class Board extends JPanel {
             if(stacks.getStacks()[initialSpot].isEmpty()){
                 return false;
             }
-            else {
-                System.out.println("hi");
+            else{
                 removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                 addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
                 if(turn == 2){
