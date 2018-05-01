@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLOutput;
 
 public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
@@ -122,11 +123,21 @@ public class Board extends JPanel {
         dice2.roll();
         repaint();
     }
-    public void checkBoard(){
-        for (int i = 0; i < 24; i++ )
-            if (!stacks.getStacks()[i].isEmpty()) {
+    public void checkBoard() {
+        boolean p1Victory = false;
+        boolean p2Victory = false;
+        for (int i = 0; i < 24; i++) {
+            if (stacks.getStacks()[i].isEmpty()) {
                 System.out.println("Coordinate " + i + " is empty.");
+            } else if (stacks.getStacks()[i].peek() == player1) {
+                System.out.println("Coordinate " + i + " contains p1 pieces");
+                p1Victory = false;
+            } else if (stacks.getStacks()[i].peek() == player2) {
+                System.out.println("Coordinate " + i + " contains p2 pieces");
+                p2Victory = false;
             }
+        }
+
     }
 
     public boolean selectedStack(int initialSpot, int finalSpot){
