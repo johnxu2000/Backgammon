@@ -149,6 +149,7 @@ public class Board extends JPanel {
                         removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                         addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
                         moveStatus = true;
+                        turn = 1;
                         repaint();
                     }
                 }
@@ -161,6 +162,7 @@ public class Board extends JPanel {
                         moveStatus = true;
                         removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                         addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
+                        turn = 2;
                         repaint();
                     }
                 }
