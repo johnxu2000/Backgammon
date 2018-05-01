@@ -130,27 +130,31 @@ public class Board extends JPanel {
     }
 
     public boolean selectedStack(int initialSpot, int finalSpot){
-        if(finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())){
-            if(stacks.getStacks()[initialSpot].isEmpty()){
-                return false;
-            }
-            else{
-                removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
-                addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
-                if(turn == 2){
-                    player2.movePiece(initialSpot, finalSpot, removedPiece);
-                    turn = 1;
+        boolean moveStatus = false;
+        if(turn == 2) {
+            if (finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
+                if (!stacks.getStacks()[initialSpot].isEmpty()) {
+                    if (stacks.getStacks()[initialSpot].peek() == player2.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                        removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
+                        addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
+                        moveStatus = true;
+                        repaint();
+                    }
                 }
-                else{
-                    player1.movePiece(initialSpot, finalSpot, removedPiece);
-                    turn = 2;
-                }
-                repaint();
-                return true;
             }
         }
-        else{
-            return  false;
+        if(turn == 1) {
+            if (initialSpot - finalSpot == dice1.getFaceValue() || initialSpot - finalSpot == dice2.getFaceValue() || initialSpot - finalSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
+                if (!stacks.getStacks()[initialSpot].isEmpty()) {
+                    if (stacks.getStacks()[initialSpot].peek() == player1.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                        moveStatus = true;
+                        removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
+                        addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
+                        repaint();
+                    }
+                }
+            }
         }
+        return moveStatus;
     }
 }

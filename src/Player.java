@@ -22,8 +22,14 @@ public class Player {
 
     }
 
-    public void movePiece(int pieceInitialSpot, int pieceFinalSpot, Piece piece){
-        piece.setX(piece.getX() + ((pieceFinalSpot - pieceInitialSpot) * -50));
+    public Piece movePieceCheck(Piece piece){
+        Piece movingPiece = null;
+        for(int i = 0; i < getPieces().length; i++){
+            if (getPieces()[i] == piece){
+                movingPiece = getPieces()[i];
+            }
+        }
+        return movingPiece;
     }
 
     public Piece[] getPieces(){
