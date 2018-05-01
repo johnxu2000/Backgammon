@@ -1,5 +1,7 @@
 
 
+import javafx.scene.shape.Circle;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -21,7 +23,6 @@ public class GameForm{
                 ((Board) gamePanel).rollDice1();
                 ((Board) gamePanel).rollDice2();
                 canMove = true;
-
             }
         });
         gamePanel.addMouseListener(new MouseAdapter() {
@@ -77,7 +78,8 @@ public class GameForm{
 
             @Override
             public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
+                super.mouseEntered(e);
+
             }
 
             @Override
@@ -88,6 +90,11 @@ public class GameForm{
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
+                Object source = e.getSource();
+                if (source instanceof JButton) {
+                    System.out.println("Mouse is over a JButton");
+                }
+                System.out.println("Mouse is over "+ e.getComponent().getClass().getName());
             }
 
             @Override
