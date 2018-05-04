@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
@@ -9,6 +10,7 @@ public class Board extends JPanel {
     Player player1, player2;
     Stacks stacks = new Stacks();
     Piece removedPiece, addPiece;
+    ArrayList <Piece> hitPieces = new ArrayList<Piece>();
     int startingY, startingX;
     int xOutlinedPiece, yOutlinedPiece;
     boolean outlinePiece = false;
@@ -72,6 +74,7 @@ public class Board extends JPanel {
         }
         g.fillRect(100, 50, 700, 400);
         g.setColor(Color.white);
+        g.fillRect(820, 20, 150, 550);
         x1 = 750;
         x2 = 700;
         x3 = 725;
@@ -109,6 +112,8 @@ public class Board extends JPanel {
         dice1.draw(g);
         dice2.draw(g);
         g.setColor(Color.black);
+        g.setFont(new Font("Serif", Font.BOLD, 20));
+        g.drawString("Hit Pieces:", 850, 50);
         g.drawLine(450, 20, 450, 450);
 
         for(int i = 0; i < player1.getPieces().length; i++){
@@ -118,6 +123,12 @@ public class Board extends JPanel {
         g.setColor(Color.green);
         if(outlinePiece){
             g.drawOval(xOutlinedPiece, yOutlinedPiece, 30, 30);
+        }
+        int hitPiecesY = 10;
+        for(int i = 0; i < hitPieces.size(); i++){
+            hitPieces.get(i).setX(880);
+            hitPieces.get(i).setY(hitPiecesY += 50);
+            hitPieces.get(i).draw(g);
         }
     }
 
@@ -148,10 +159,15 @@ public class Board extends JPanel {
 
     public boolean selectedStack(int initialSpot, int finalSpot){
         boolean moveStatus = false;
+        Piece hitPiece;
         if(turn == 2) {
             if (finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
                 if (!stacks.getStacks()[initialSpot].isEmpty()) {
                     if (stacks.getStacks()[initialSpot].peek() == player2.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                        if(stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece)stacks.getStacks()[finalSpot].peek()).getColour()){
+                            hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
+                            hitPieces.add(hitPiece);
+                        }
                         removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                         addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
                         moveStatus = true;
@@ -165,6 +181,10 @@ public class Board extends JPanel {
             if (initialSpot - finalSpot == dice1.getFaceValue() || initialSpot - finalSpot == dice2.getFaceValue() || initialSpot - finalSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
                 if (!stacks.getStacks()[initialSpot].isEmpty()) {
                     if (stacks.getStacks()[initialSpot].peek() == player1.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                        if(stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece)stacks.getStacks()[finalSpot].peek()).getColour()){
+                            hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
+                            hitPieces.add(hitPiece);
+                        }
                         moveStatus = true;
                         removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                         addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
@@ -178,8 +198,8 @@ public class Board extends JPanel {
     }
 
     public void selectedPiece(int initialSpot){
-        Piece topOfStack = (Piece)stacks.getStacks()[initialSpot].peek();
         if(!stacks.getStacks()[initialSpot].isEmpty()) {
+            Piece topOfStack = (Piece)stacks.getStacks()[initialSpot].peek();
             if (turn == 1) {
                 if (topOfStack == player1.movePieceCheck(topOfStack)) {
                     xOutlinedPiece = topOfStack.getX();
@@ -199,6 +219,7 @@ public class Board extends JPanel {
             }
         }
     }
+
 
     public void setOutlinedPiece(){
         outlinePiece = false;
