@@ -32,6 +32,7 @@ public class Player {
         return movingPiece;
     }
 
+
     public Piece[] getPieces(){
         return pieces;
     }
