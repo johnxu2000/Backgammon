@@ -14,15 +14,18 @@ public class GameForm{
     int numClicks = 0;
     int startingStack, endingStack;
     boolean canMove = false;
-    boolean move;
+    boolean canRoll = true;
 
     public GameForm(){
         roll.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((Board) gamePanel).rollDice1();
-                ((Board) gamePanel).rollDice2();
-                canMove = true;
+                if(canRoll) {
+                    ((Board) gamePanel).rollDice1();
+                    ((Board) gamePanel).rollDice2();
+                    canMove = true;
+                    canRoll = false;
+                }
             }
         });
         gamePanel.addMouseListener(new MouseAdapter() {
@@ -42,9 +45,13 @@ public class GameForm{
                                     endingStack = i;
                                     if(((Board) gamePanel).selectedStack(startingStack, endingStack)){
                                         canMove = false;
+                                        canRoll = true;
                                         ((Board) gamePanel).setOutlinedPiece();
+                                        numClicks = 0;
                                     }
-                                    numClicks = 0;
+                                    else{
+                                        numClicks = 0;
+                                    }
                                 } else {
                                     startingStack = i;
                                     ((Board) gamePanel).selectedPiece(startingStack);
@@ -56,10 +63,14 @@ public class GameForm{
                                     endingStack = i;
                                     if(((Board) gamePanel).selectedStack(startingStack, endingStack)){
                                         canMove = false;
+                                        canRoll = true;
+                                        numClicks = 0;
                                         ((Board) gamePanel).setOutlinedPiece();
 
                                     }
-                                    numClicks = 0;
+                                    else{
+                                        numClicks = 0;
+                                    }
                                 } else {
                                     startingStack = i;
                                     ((Board) gamePanel).selectedPiece(startingStack);
