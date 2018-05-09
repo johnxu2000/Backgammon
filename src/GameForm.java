@@ -49,12 +49,6 @@ public class GameForm{
                                         ((Board) gamePanel).setOutlinedPiece();
                                         numClicks = 0;
                                     }
-                                    if(((Board) gamePanel).selectedStack(startingStack, startingStack)){
-                                        canMove = true;
-                                        canRoll = false;
-                                        ((Board) gamePanel).setOutlinedPiece();
-                                        numClicks = 0;
-                                    }
                                     else{
                                         numClicks = 0;
                                     }
@@ -73,12 +67,6 @@ public class GameForm{
                                         numClicks = 0;
                                         ((Board) gamePanel).setOutlinedPiece();
 
-                                    }
-                                    if (((Board) gamePanel).selectedStack(startingStack, startingStack)){
-                                        canMove = true;
-                                        canRoll = false;
-                                        numClicks = 0;
-                                        ((Board) gamePanel).setOutlinedPiece();
                                     }
                                     else{
                                         numClicks = 0;
