@@ -126,6 +126,7 @@ public class GameForm{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setResizable(false);
         frame.setPreferredSize(new Dimension(1000, 600));
     }
 
