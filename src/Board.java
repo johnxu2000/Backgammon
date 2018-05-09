@@ -1,14 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+/*
+The Board class draws the dices and pieces at the same time also contains essential algorithms for the game to run.
+ */
 public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
     Player player1, player2;
     Stacks stacks = new Stacks();
-    Piece removedPiece, addPiece;
+    Piece removedPiece, addPiece; //Pieces can be added individually
     ArrayList <Piece> hitPieces = new ArrayList<Piece>();
     int startingY, startingX;
     int xOutlinedPiece, yOutlinedPiece;
@@ -19,10 +21,9 @@ public class Board extends JPanel {
     public Board(){
         player1 = new Player(Color.orange, startingX, startingY);
         player2 = new Player(Color.black, startingX, startingY);
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < 2; i++) { //Putting the pieces on the board at the correct spots
             stacks.getStacks()[23].push(player1.getPieces()[i]);
             stacks.getStacks()[0].push(player2.getPieces()[i]);
-
         }
         for(int i = 2; i < 7; i++) {
             stacks.getStacks()[11].push(player2.getPieces()[i]);
@@ -156,7 +157,12 @@ public class Board extends JPanel {
             }
         }
     }
+    public void checkStack(){
 
+    }
+    public void checkPlayerPiece(){
+
+    }
 
     public boolean selectedStack(int initialSpot, int finalSpot){
         boolean moveStatus = false;
@@ -234,5 +240,6 @@ public class Board extends JPanel {
 
     public void setOutlinedPiece(){
         outlinePiece = false;
+        repaint();
     }
 }

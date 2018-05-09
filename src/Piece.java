@@ -1,9 +1,13 @@
 import java.awt.*;
-import java.util.*;
+/*
+This class's purpose is to create the pieces objects that the player, and board need in order to play the game.
+The pieces's width and height are fixed values and there are only two different colours of the pieces.
+The piece class itself can show the status of a piece if it got off the board.
+ */
 
 public class Piece {
     int x,y, pieceNumber;
-    boolean status;
+    boolean status; //If the piece is off the board
     Color colour;
 
     public Piece(int x, int y, int pieceNumber, boolean status, Color colour){
