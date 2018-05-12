@@ -6,8 +6,8 @@ public class Piece {
     boolean status;
     Color colour;
 
-    public Piece(int x, int y, int pieceNumber, boolean status, Color colour){
-        this.status = status;
+    public Piece(int x, int y, int pieceNumber, boolean onBoard, Color colour){
+        this.status = onBoard;
         this.x = x;
         this.y = y;
         this.pieceNumber = pieceNumber;
@@ -21,7 +21,7 @@ public class Piece {
         return pieceNumber;
     }
 
-    public boolean getStatus(){
+    public boolean onBoard(){
         return status;
     }
 

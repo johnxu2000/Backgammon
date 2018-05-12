@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 public class Player {
     Color colourOfPieces;
     Piece[] pieces;
+    Stack<Piece> hitPieces = new Stack<Piece>();
     boolean pieceOnBoard = true;
     public Player(Color colourOfPieces, int startingX, int startingY){
         this.colourOfPieces = colourOfPieces;
@@ -32,6 +35,37 @@ public class Player {
         return movingPiece;
     }
 
+    public Piece checkForHitPiece(Piece piece){
+        Piece hitPiece = null;
+        for(int i = 0; i < getPieces().length; i++){
+            if (getPieces()[i] == piece){
+                hitPiece = getPieces()[i];
+            }
+        }
+        return hitPiece;
+    }
+
+    public void addHitPiece(Piece piece){
+        hitPieces.push(piece);
+    }
+
+    public Stack<Piece> getHitPieces() {
+        return hitPieces;
+    }
+
+    public Piece removeHitPiece(){
+        Piece removedPiece = hitPieces.pop();
+        return removedPiece;
+    }
+
+    public boolean hasHitPiece(){
+        if(hitPieces.size() != 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     public Piece[] getPieces(){
         return pieces;
