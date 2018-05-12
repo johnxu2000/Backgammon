@@ -1,5 +1,7 @@
 import java.util.Stack;
-
+/*
+Storing the pieces onto the stacks for management.
+ */
 public class Stacks {
     Stack[] stacks = new Stack[24];
     public Stacks() {

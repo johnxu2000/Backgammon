@@ -1,5 +1,8 @@
 import java.awt.*;
-import java.util.ArrayList;
+/*
+The player class controls the pieces. The player is able to place the pieces on the correct spots and check which moves they have made
+in order for the Board class to draw them properly.
+ */
 import java.util.Stack;
 
 public class Player {

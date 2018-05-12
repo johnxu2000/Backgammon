@@ -1,18 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+/*
+The Board class draws the dices and pieces at the same time also contains essential algorithms for the game to run.
+ */
 public class Board extends JPanel {
     int x1, x2, x3, y1, y2, y3;
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
     Player player1, player2;
     Stacks stacks = new Stacks();
-    Piece removedPiece, addPiece;
+    Piece removedPiece, addPiece; //Pieces can be added individually
+    ArrayList <Piece> hitPieces = new ArrayList<Piece>();
     int startingY, startingX;
     int xOutlinedPiece, yOutlinedPiece;
     boolean outlinePiece = false;
     int turn = 1;
+    boolean p1Victory = false;
+    boolean p2Victory = false;
     int totalNumSpaces = 0;
     int numSpacesMoving;
     boolean condition1 = true;
@@ -23,7 +28,7 @@ public class Board extends JPanel {
     public Board(){
         player1 = new Player(Color.orange, startingX, startingY);
         player2 = new Player(Color.black, startingX, startingY);
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < 2; i++) { //Putting the pieces on the board at the correct spots
             stacks.getStacks()[23].push(player1.getPieces()[i]);
             stacks.getStacks()[0].push(player2.getPieces()[i]);
 
@@ -154,22 +159,26 @@ public class Board extends JPanel {
         repaint();
     }
     public void checkBoard() {
-        boolean p1Victory = false;
-        boolean p2Victory = false;
-        for (int i = 0; i < 24; i++) {
-            if (stacks.getStacks()[i].isEmpty()) {
-                System.out.println("Coordinate " + i + " is empty.");
-            } else if (stacks.getStacks()[i].peek() == player1) {
-                System.out.println("Coordinate " + i + " contains p1 pieces");
-                p1Victory = false;
-            } else if (stacks.getStacks()[i].peek() == player2) {
-                System.out.println("Coordinate " + i + " contains p2 pieces");
-                p2Victory = false;
+        while(!p1Victory && !p2Victory) {
+            for (int i = 0; i < 24; i++) {
+                if (stacks.getStacks()[i].isEmpty()) {
+                    System.out.println("Coordinate " + i + " is empty.");
+                } else if (stacks.getStacks()[i].peek() == player1) {
+                    System.out.println("Coordinate " + i + " contains p1 pieces");
+                    p1Victory = false;
+                } else if (stacks.getStacks()[i].peek() == player2) {
+                    System.out.println("Coordinate " + i + " contains p2 pieces");
+                    p2Victory = false;
+                } else p1Victory = true; p2Victory = true;
             }
         }
+    }
+    public void checkStack(){
 
     }
+    public void checkPlayerPiece(){
 
+    }
 
     public boolean selectedStack(int initialSpot, int finalSpot){
         boolean moveStatus = false;
