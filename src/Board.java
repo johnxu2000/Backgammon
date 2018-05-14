@@ -11,7 +11,6 @@ public class Board extends JPanel {
     Player player1, player2;
     Stacks stacks = new Stacks();
     Piece removedPiece, addPiece; //Pieces can be added individually
-    ArrayList <Piece> hitPieces = new ArrayList<Piece>();
     int startingY, startingX;
     int xOutlinedPiece, yOutlinedPiece;
     boolean outlinePiece = false;
@@ -185,13 +184,15 @@ public class Board extends JPanel {
         boolean usingHitPiece = false;
         Piece hitPiece;
         if(initialSpot == -1){
-            initialSpot = 0;
+            if(getTurn() == 1){
+                initialSpot = 24;
+            }
             usingHitPiece = true;
         }
         if(checkValididtyOfMove(initialSpot, finalSpot)) {
             if(checkDiceUsage()) {
                 moveStatus = true;
-                if (stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
+                if (!usingHitPiece && stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
                     hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
                     if (getTurn() == 1) {
                         player2.addHitPiece(hitPiece);
@@ -205,10 +206,18 @@ public class Board extends JPanel {
                 }
                 if(usingHitPiece) {
                     if(getTurn() == 1){
+                        if (stacks.getStacks()[finalSpot].size() == 1 && player1.hitPieces.peek().getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
+                            hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
+                            player2.addHitPiece(hitPiece);
+                        }
                         removedPiece = player1.getHitPieces().pop();
                         addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
                     }
                     else{
+                        if (stacks.getStacks()[finalSpot].size() == 1 && player2.hitPieces.peek().getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()){
+                            hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
+                            player1.addHitPiece(hitPiece);
+                        }
                         removedPiece = player2.getHitPieces().pop();
                         addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
                     }
@@ -219,21 +228,18 @@ public class Board extends JPanel {
     }
 
     public void selectedPiece(int initialSpot){
+        Piece topOfHits;
         if(initialSpot == -1){
             if(turn == 1){
-                Piece topOfHits = player1.getHitPieces().get(0);
-                xOutlinedPiece = topOfHits.getX();
-                yOutlinedPiece = topOfHits.getY();
-                outlinePiece = true;
-                repaint();
+                topOfHits = player1.getHitPieces().get(0);
             }
             else{
-                Piece topOfHits = player2.getHitPieces().get(0);
-                xOutlinedPiece = topOfHits.getX();
-                yOutlinedPiece = topOfHits.getY();
-                outlinePiece = true;
-                repaint();
+                topOfHits = player2.getHitPieces().get(0);
             }
+            xOutlinedPiece = topOfHits.getX();
+            yOutlinedPiece = topOfHits.getY();
+            outlinePiece = true;
+            repaint();
         }
         else {
             if (!stacks.getStacks()[initialSpot].isEmpty()) {
@@ -263,10 +269,14 @@ public class Board extends JPanel {
         boolean move = false;
         if(turn == 2) {
             if (finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
-                if (!stacks.getStacks()[initialSpot].isEmpty()) {
-                    if (stacks.getStacks()[initialSpot].peek() == player2.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                System.out.println("hi");
+                if (player2.getHitPieces().size() != 0 || !stacks.getStacks()[initialSpot].isEmpty()) {
+                    System.out.println("hi");
+                    if (player2.getHitPieces().size() != 0 || stacks.getStacks()[initialSpot].peek() == player2.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                        System.out.println("hi");
                         if ((stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.black) || stacks.getStacks()[finalSpot].size() == 0)  {
                             numSpacesMoving = finalSpot - initialSpot;
+                            System.out.println(numSpacesMoving);
                                 move = true;
                         }
                         else if(stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.orange){
@@ -279,9 +289,10 @@ public class Board extends JPanel {
         }
         if(turn == 1) {
             if (initialSpot - finalSpot == dice1.getFaceValue() || initialSpot - finalSpot == dice2.getFaceValue() || initialSpot - finalSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
-                if (!stacks.getStacks()[initialSpot].isEmpty()) {
-                    if (stacks.getStacks()[initialSpot].peek() == player1.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                if (player1.getHitPieces().size() != 0 || !stacks.getStacks()[initialSpot].isEmpty()) {
+                    if (player1.getHitPieces().size() != 0|| stacks.getStacks()[initialSpot].peek() == player1.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
                         if ((stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.orange) || stacks.getStacks()[finalSpot].size() == 0) {
+                            System.out.println(numSpacesMoving);
                             numSpacesMoving = initialSpot - finalSpot;
                                 move = true;
                         }
