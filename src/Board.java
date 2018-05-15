@@ -158,25 +158,16 @@ public class Board extends JPanel {
         repaint();
     }
     public void checkBoard() {
-        while(!p1Victory && !p2Victory) {
-            for (int i = 0; i < 24; i++) {
-                if (stacks.getStacks()[i].isEmpty()) {
-                    System.out.println("Coordinate " + i + " is empty.");
-                } else if (stacks.getStacks()[i].peek() == player1) {
-                    System.out.println("Coordinate " + i + " contains p1 pieces");
-                    p1Victory = false;
-                } else if (stacks.getStacks()[i].peek() == player2) {
-                    System.out.println("Coordinate " + i + " contains p2 pieces");
-                    p2Victory = false;
-                } else p1Victory = true; p2Victory = true;
+        if(getTurn() == 1){
+            if(player1.checkWin()){
+                System.out.println("Game Over");
             }
         }
-    }
-    public void checkStack(){
-
-    }
-    public void checkPlayerPiece(){
-
+        else{
+            if(player2.checkWin()){
+                System.out.println("Game Over");
+            }
+        }
     }
 
     public boolean selectedStack(int initialSpot, int finalSpot){
@@ -227,6 +218,33 @@ public class Board extends JPanel {
         return moveStatus;
     }
 
+    public boolean canGoOffBoard(int initialSpot){
+        boolean moveIsPossible = false;
+        if(getTurn() == 1){
+            int finalSpot = -1;
+            if(player1.piecesAreHome()){
+                numSpacesMoving = initialSpot - finalSpot;
+                if(checkDiceUsage()){
+                    removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
+                    player1.addOffBoardPiece(removedPiece);
+                    moveIsPossible = true;
+                }
+            }
+        }
+        else{
+            int finalSpot = 24;
+            if(player2.piecesAreHome()){
+                numSpacesMoving = finalSpot - initialSpot;
+                if(checkDiceUsage()) {
+                    removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
+                    player2.addOffBoardPiece(removedPiece);
+                    moveIsPossible = true;
+                }
+            }
+        }
+        return moveIsPossible;
+    }
+
     public void selectedPiece(int initialSpot){
         Piece topOfHits;
         if(initialSpot == -1){
@@ -269,14 +287,10 @@ public class Board extends JPanel {
         boolean move = false;
         if(turn == 2) {
             if (finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
-                System.out.println("hi");
-                if (player2.getHitPieces().size() != 0 || !stacks.getStacks()[initialSpot].isEmpty()) {
-                    System.out.println("hi");
+                if (player2.getHitPieces().size() != 0 || (!stacks.getStacks()[initialSpot].isEmpty() && stacks.getStacks()[finalSpot].size() < 5)) {
                     if (player2.getHitPieces().size() != 0 || stacks.getStacks()[initialSpot].peek() == player2.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
-                        System.out.println("hi");
-                        if ((stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.black) || stacks.getStacks()[finalSpot].size() == 0)  {
+                        if (finalSpot == 24 || (stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.black) || stacks.getStacks()[finalSpot].size() == 0)  {
                             numSpacesMoving = finalSpot - initialSpot;
-                            System.out.println(numSpacesMoving);
                                 move = true;
                         }
                         else if(stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.orange){
@@ -289,10 +303,9 @@ public class Board extends JPanel {
         }
         if(turn == 1) {
             if (initialSpot - finalSpot == dice1.getFaceValue() || initialSpot - finalSpot == dice2.getFaceValue() || initialSpot - finalSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
-                if (player1.getHitPieces().size() != 0 || !stacks.getStacks()[initialSpot].isEmpty()) {
+                if (player1.getHitPieces().size() != 0 || (!stacks.getStacks()[initialSpot].isEmpty() && stacks.getStacks()[finalSpot].size() < 5)) {
                     if (player1.getHitPieces().size() != 0|| stacks.getStacks()[initialSpot].peek() == player1.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
-                        if ((stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.orange) || stacks.getStacks()[finalSpot].size() == 0) {
-                            System.out.println(numSpacesMoving);
+                        if (finalSpot == -1 || (stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.orange) || stacks.getStacks()[finalSpot].size() == 0) {
                             numSpacesMoving = initialSpot - finalSpot;
                                 move = true;
                         }

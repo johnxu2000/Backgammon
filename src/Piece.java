@@ -21,12 +21,13 @@ public class Piece {
         g.setColor(colour);
         g.fillOval(x,y,30,30);
     }
-    public int getPieceNumber(){
-        return pieceNumber;
-    }
 
     public boolean onBoard(){
         return status;
+    }
+
+    public void setOffBoard(){
+        status = false;
     }
 
     public void setX(int x) {

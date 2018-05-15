@@ -3,12 +3,14 @@ import java.awt.*;
 The player class controls the pieces. The player is able to place the pieces on the correct spots and check which moves they have made
 in order for the Board class to draw them properly.
  */
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Player {
     Color colourOfPieces;
     Piece[] pieces;
     Stack<Piece> hitPieces = new Stack<Piece>();
+    ArrayList<Piece> offBoardPieces = new ArrayList<Piece>();
     boolean pieceOnBoard = true;
     public Player(Color colourOfPieces, int startingX, int startingY){
         this.colourOfPieces = colourOfPieces;
@@ -38,28 +40,53 @@ public class Player {
         return movingPiece;
     }
 
-    public Piece checkForHitPiece(Piece piece){
-        Piece hitPiece = null;
-        for(int i = 0; i < getPieces().length; i++){
-            if (getPieces()[i] == piece){
-                hitPiece = getPieces()[i];
+    public boolean piecesAreHome(){
+        int numPiecesHome = 0;
+        for(int i = 0; i < 15; i++){
+            if(getPieces()[i].getX() > 400 && getPieces()[i].getX() < 750){
+                numPiecesHome++;
             }
         }
-        return hitPiece;
+        if(numPiecesHome == 15){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public void addHitPiece(Piece piece){
         hitPieces.push(piece);
     }
 
+    public void addOffBoardPiece(Piece piece){
+        for(int i = 0; i < getPieces().length; i++){
+            if (getPieces()[i] == piece){
+                getPieces()[i].setOffBoard();
+            }
+        }
+    }
+
+    public boolean checkWin() {
+        int numPiecesOffBoard = 0;
+        for (int i = 0; i < 15; i++) {
+            if (getPieces()[i].onBoard()) {
+                numPiecesOffBoard++;
+            }
+        }
+        if(numPiecesOffBoard == 15){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
     public Stack<Piece> getHitPieces() {
         return hitPieces;
     }
 
-    public Piece removeHitPiece(){
-        Piece removedPiece = hitPieces.pop();
-        return removedPiece;
-    }
 
     public boolean hasHitPiece(){
         if(hitPieces.size() != 0){

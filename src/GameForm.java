@@ -31,57 +31,72 @@ public class GameForm{
             public void mouseClicked(MouseEvent e) {
                 if(canMove) {
                     super.mouseClicked(e);
-                        if ((((Board) gamePanel).getTurn() == 1 && ((Board) gamePanel).getPlayer1HitPieceStatus() && numClicks == 0) || (((Board) gamePanel).getTurn() == 2 && ((Board) gamePanel).getPlayer2HitPieceStatus() && numClicks == 0)) {
-                            if (e.getX() < 930 && e.getX() > 860) {
-                                startingStack = -1;
-                                numClicks = 1;
-                                ((Board) gamePanel).selectedPiece(startingStack);
-                            }
-                        } else {
-                            int boundaryX = 750;
-                            int boundaryX2 = 700;
-                            int boundaryY = 265;
-                            int boundaryY2 = 450;
-                            for (int i = 0; i < 24; i++) {
-                                if (e.getX() < boundaryX && e.getX() > boundaryX2) {
-                                    if ((i < 12 && boundaryY < e.getY() && e.getY() < boundaryY2) || (i >= 12 && boundaryY > e.getY() && e.getY() > boundaryY2)) {
-                                        numClicks++;
-                                        if (numClicks == 2) {
-                                            ((Board) gamePanel).setOutlinedPieceToFalse();
-                                            endingStack = i;
-                                            if (((Board) gamePanel).selectedStack(startingStack, endingStack)) {
-                                                if (((Board) gamePanel).getTotalNumSpaces() == 0) {
-                                                    canMove = false;
-                                                    canRoll = true;
-                                                    ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
-                                                    ((Board) gamePanel).setConditions();
-                                                }
-                                                numClicks = 0;
-                                            } else {
-                                                numClicks = 0;
+                    if ((((Board) gamePanel).getTurn() == 1 && ((Board) gamePanel).getPlayer1HitPieceStatus() && numClicks == 0) || (((Board) gamePanel).getTurn() == 2 && ((Board) gamePanel).getPlayer2HitPieceStatus() && numClicks == 0)) {
+                        if (e.getX() < 930 && e.getX() > 860) {
+                            startingStack = -1;
+                            numClicks = 1;
+                            ((Board) gamePanel).selectedPiece(startingStack);
+                        }
+                    } else {
+                        int boundaryX = 750;
+                        int boundaryX2 = 700;
+                        int boundaryY = 265;
+                        int boundaryY2 = 450;
+                        for (int i = 0; i < 24; i++) {
+                            if (e.getX() < boundaryX && e.getX() > boundaryX2) {
+                                if ((i < 12 && boundaryY < e.getY() && e.getY() < boundaryY2) || (i >= 12 && boundaryY > e.getY() && e.getY() > boundaryY2)) {
+                                    numClicks++;
+                                    if (numClicks == 2) {
+                                        ((Board) gamePanel).setOutlinedPieceToFalse();
+                                        endingStack = i;
+                                        if (((Board) gamePanel).selectedStack(startingStack, endingStack)) {
+                                            if (((Board) gamePanel).getTotalNumSpaces() == 0) {
+                                                canMove = false;
+                                                canRoll = true;
+                                                ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
+                                                ((Board) gamePanel).setConditions();
                                             }
+                                            numClicks = 0;
                                         } else {
-                                            startingStack = i;
-                                            ((Board) gamePanel).selectedPiece(startingStack);
+                                            numClicks = 0;
                                         }
-                                        break;
+                                    } else {
+                                        startingStack = i;
+                                        ((Board) gamePanel).selectedPiece(startingStack);
+                                    }
+                                    break;
+                                }
+                            }
+                            if (i < 11) {
+                                boundaryX -= 50;
+                                boundaryX2 -= 50;
+                            } else if (i == 11) {
+                                boundaryY -= 30;
+                                boundaryY2 -= 400;
+                            } else {
+                                boundaryX += 50;
+                                boundaryX2 += 50;
+                            }
+                        }
+                        if(e.getX() > 750 && e.getX() < 800){
+                            if(e.getY() > 50 && e.getY() < 450){
+                                System.out.println(startingStack);
+                                ((Board) gamePanel).setOutlinedPieceToFalse();
+                                if (((Board) gamePanel).canGoOffBoard(startingStack)) {
+                                    if (((Board) gamePanel).getTotalNumSpaces() == 0) {
+                                        canMove = false;
+                                        canRoll = true;
+                                        ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
+                                        ((Board) gamePanel).setConditions();
                                     }
                                 }
-                                if (i < 11) {
-                                    boundaryX -= 50;
-                                    boundaryX2 -= 50;
-                                } else if (i == 11) {
-                                    boundaryY -= 30;
-                                    boundaryY2 -= 400;
-                                } else {
-                                    boundaryX += 50;
-                                    boundaryX2 += 50;
-                                }
                             }
-
                         }
+
+
                     }
                 }
+            }
 
             @Override
             public void mousePressed(MouseEvent e) {
