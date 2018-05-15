@@ -1,0 +1,14 @@
+Win Condition:
+Be the first player to move all of their 15 checkers off the board.
+
+Taking Turns:
+On each turn, you first clock the "Roll" button. After rolling the dice, you select the piece you want the move(the piece selected will have a faint green outline around it).
+The number rolled on each die determines how many points you can move. Your checker can only be moved to an open point. (An open point is one which is not occupied by two or more of your opponent’s checkers).
+Be aware that each die could be used to move a separate piece. Spend your moves wisely.
+
+Hitting and Entering:
+If a single checker of either color is located on a point, that is known as a blot. If your checker lands on an opponent’s blot, the opponent’s checker is removed from the board and placed on the "hitpieces" area.
+The opponent cannot make any other move until they they their piece from the "hitpieces" area back onto the board by doing the steps mentioned in "Taking Turns".
+
+Note:  - A piece is de-selected if the move the player has issued is invalid.
+       - No moves can be made unless the dice has been rolled.

@@ -1,14 +1,19 @@
-
+/*
+The driver class that contains the UI and listeners necessary for selected stacks, hitpiece etc. to function correctly.
+ */
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class GameForm{
     private JPanel gamePanel;
     private JPanel backgammonPanel;
     private JPanel menuPanel;
     private JButton roll;
+    private JButton rules;
     int numClicks = 0;
     int startingStack, endingStack;
     boolean canMove = false;
@@ -106,6 +111,20 @@ public class GameForm{
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
+            }
+        });
+        rules.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Desktop desktop = null;
+                if (Desktop.isDesktopSupported()){
+                    desktop = Desktop.getDesktop();
+                    try {
+                        desktop.open(new File("C:\\Users\\johnx\\IdeaProjects\\Backgammon\\res"));
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
             }
         });
     }
