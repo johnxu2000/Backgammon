@@ -180,7 +180,7 @@ public class Board extends JPanel {
             }
             usingHitPiece = true;
         }
-        if(checkValididtyOfMove(initialSpot, finalSpot)) {
+        if(checkValididtyOfMove(initialSpot, finalSpot)) { //Runs after selected piece. This decides if the piece could move to a specific spot the user pointed at.
             if(checkDiceUsage()) {
                 moveStatus = true;
                 if (!usingHitPiece && stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
@@ -283,7 +283,7 @@ public class Board extends JPanel {
         }
     }
 
-    public boolean checkValididtyOfMove(int initialSpot, int finalSpot){
+    public boolean checkValididtyOfMove(int initialSpot, int finalSpot){ //If the stack meets the requirement for the piece to move there.
         boolean move = false;
         if(turn == 2) {
             if (finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
