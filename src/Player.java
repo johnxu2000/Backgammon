@@ -59,7 +59,7 @@ public class Player {
         hitPieces.push(piece);
     }
 
-    public void addOffBoardPiece(Piece piece){
+    public void offBoardPiece(Piece piece){
         for(int i = 0; i < getPieces().length; i++){
             if (getPieces()[i] == piece){
                 getPieces()[i].setOffBoard();
@@ -70,7 +70,7 @@ public class Player {
     public boolean checkWin() {
         int numPiecesOffBoard = 0;
         for (int i = 0; i < 15; i++) {
-            if (getPieces()[i].onBoard()) {
+            if (!getPieces()[i].onBoard()) {
                 numPiecesOffBoard++;
             }
         }

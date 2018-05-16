@@ -18,8 +18,10 @@ public class Piece {
         this.colour = colour;
     }
     public void draw(Graphics g){
-        g.setColor(colour);
-        g.fillOval(x,y,30,30);
+        if(onBoard()) {
+            g.setColor(colour);
+            g.fillOval(x, y, 30, 30);
+        }
     }
 
     public boolean onBoard(){

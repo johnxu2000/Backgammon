@@ -36,7 +36,7 @@ public class GameForm{
             public void mouseClicked(MouseEvent e) {
                 if(canMove) {
                     super.mouseClicked(e);
-                    if ((((Board) gamePanel).getTurn() == 1 && ((Board) gamePanel).getPlayer1HitPieceStatus() && numClicks == 0) || (((Board) gamePanel).getTurn() == 2 && ((Board) gamePanel).getPlayer2HitPieceStatus() && numClicks == 0)) {
+                    if (((Board) gamePanel).getPlayerHitPieceStatus() && numClicks == 0) {
                         if (e.getX() < 930 && e.getX() > 860) {
                             startingStack = -1;
                             numClicks = 1;
@@ -88,7 +88,9 @@ public class GameForm{
                                 System.out.println(startingStack);
                                 ((Board) gamePanel).setOutlinedPieceToFalse();
                                 if (((Board) gamePanel).canGoOffBoard(startingStack)) {
+                                    System.out.println(startingStack + "hi");
                                     if (((Board) gamePanel).getTotalNumSpaces() == 0) {
+                                        System.out.println("hi");
                                         canMove = false;
                                         canRoll = true;
                                         ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
@@ -135,7 +137,7 @@ public class GameForm{
                 if (Desktop.isDesktopSupported()){
                     desktop = Desktop.getDesktop();
                     try {
-                        desktop.open(new File("C:\\Users\\johnx\\IdeaProjects\\Backgammon\\res"));
+                        desktop.open(new File("/Users/raminakhavan/IdeaProjects/BackgammonProject/res/BackgammonRules.txt"));
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }

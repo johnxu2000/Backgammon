@@ -1,6 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+
 /*
 The Board class draws the dices and pieces at the same time also contains essential algorithms for the game to run.
  */
@@ -15,15 +15,14 @@ public class Board extends JPanel {
     int xOutlinedPiece, yOutlinedPiece;
     boolean outlinePiece = false;
     int turn = 1;
-    boolean p1Victory = false;
-    boolean p2Victory = false;
     int totalNumSpaces = 0;
     int numSpacesMoving;
     boolean condition1 = true;
     boolean condition2 = true;
     boolean condition3 = true;
     boolean player1HasHitPiece = false;
-    boolean player2HasHitPiece = false;
+    boolean playerHasHitPiece = false;
+    int numDoubles = 0;
     public Board(){
         player1 = new Player(Color.orange, startingX, startingY);
         player2 = new Player(Color.black, startingX, startingY);
@@ -44,7 +43,7 @@ public class Board extends JPanel {
             stacks.getStacks()[5].push(player1.getPieces()[i]);
             stacks.getStacks()[18].push(player2.getPieces()[i]);
         }
-        checkBoard();
+        winner();
     }
 
     public void paintComponent(Graphics g){
@@ -125,10 +124,6 @@ public class Board extends JPanel {
         g.drawString("Hit Pieces:", 850, 50);
         g.drawLine(450, 20, 450, 450);
 
-        g.setColor(Color.green);
-        if(outlinePiece){
-            g.drawOval(xOutlinedPiece, yOutlinedPiece, 30, 30);
-        }
         int hitPiecesY = 60;
         int hitPiecesX = 880;
         for(int i = 0; i < player1.hitPieces.size(); i++){
@@ -145,29 +140,33 @@ public class Board extends JPanel {
             player1.getPieces()[i].draw(g);
             player2.getPieces()[i].draw(g);
         }
+        g.setColor(Color.green);
+        if(outlinePiece){
+            g.drawOval(xOutlinedPiece, yOutlinedPiece, 30, 30);
+        }
     }
 
     public void rollDice1(){
         dice1.roll();
-        totalNumSpaces = dice1.getFaceValue() + dice2.getFaceValue();
         repaint();
     }
     public void rollDice2(){
         dice2.roll();
-        totalNumSpaces = dice1.getFaceValue() + dice2.getFaceValue();
+        if(dice1.getFaceValue() == dice2.getFaceValue()){
+            totalNumSpaces = 2 * (dice1.getFaceValue() + dice2.getFaceValue());
+        }
+        else {
+            totalNumSpaces = dice1.getFaceValue() + dice2.getFaceValue();
+        }
         repaint();
     }
-    public void checkBoard() {
-        if(getTurn() == 1){
-            if(player1.checkWin()){
-                System.out.println("Game Over");
-            }
+    public boolean winner() {
+        boolean winner = false;
+        if(getPlayer().checkWin()){
+            System.out.println("Game Over");
+            winner = true;
         }
-        else{
-            if(player2.checkWin()){
-                System.out.println("Game Over");
-            }
-        }
+        return winner;
     }
 
     public boolean selectedStack(int initialSpot, int finalSpot){
@@ -180,38 +179,30 @@ public class Board extends JPanel {
             }
             usingHitPiece = true;
         }
-        if(checkValididtyOfMove(initialSpot, finalSpot)) { //Runs after selected piece. This decides if the piece could move to a specific spot the user pointed at.
+        if(checkValididtyOfMove(initialSpot, finalSpot)) {
+            System.out.println("hi");//Runs after selected piece. This decides if the piece could move to a specific spot the user pointed at.
             if(checkDiceUsage()) {
+                System.out.println("hi");
                 moveStatus = true;
                 if (!usingHitPiece && stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
                     hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
-                    if (getTurn() == 1) {
-                        player2.addHitPiece(hitPiece);
-                    } else {
-                        player1.addHitPiece(hitPiece);
-                    }
+                    changeTurn(getTurn());
+                    getPlayer().addHitPiece(hitPiece);
+                    changeTurn(getTurn());
                 }
                 if(!usingHitPiece) {
                     removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                     addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
                 }
                 if(usingHitPiece) {
-                    if(getTurn() == 1){
-                        if (stacks.getStacks()[finalSpot].size() == 1 && player1.hitPieces.peek().getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
-                            hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
-                            player2.addHitPiece(hitPiece);
-                        }
-                        removedPiece = player1.getHitPieces().pop();
-                        addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
+                    if (stacks.getStacks()[finalSpot].size() == 1 && getPlayer().hitPieces.peek().getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
+                        hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
+                        changeTurn(getTurn());
+                        getPlayer().addHitPiece(hitPiece);
+                        changeTurn(getTurn());
                     }
-                    else{
-                        if (stacks.getStacks()[finalSpot].size() == 1 && player2.hitPieces.peek().getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()){
-                            hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
-                            player1.addHitPiece(hitPiece);
-                        }
-                        removedPiece = player2.getHitPieces().pop();
-                        addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
-                    }
+                    removedPiece = getPlayer().getHitPieces().pop();
+                    addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
                 }
             }
         }
@@ -220,26 +211,20 @@ public class Board extends JPanel {
 
     public boolean canGoOffBoard(int initialSpot){
         boolean moveIsPossible = false;
-        if(getTurn() == 1){
+        if(getTurn() == 1) {
             int finalSpot = -1;
-            if(player1.piecesAreHome()){
-                numSpacesMoving = initialSpot - finalSpot;
-                if(checkDiceUsage()){
-                    removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
-                    player1.addOffBoardPiece(removedPiece);
-                    moveIsPossible = true;
-                }
-            }
+            numSpacesMoving = initialSpot - finalSpot;
         }
-        else{
+        if(getTurn() == 2) {
             int finalSpot = 24;
-            if(player2.piecesAreHome()){
-                numSpacesMoving = finalSpot - initialSpot;
-                if(checkDiceUsage()) {
-                    removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
-                    player2.addOffBoardPiece(removedPiece);
-                    moveIsPossible = true;
-                }
+            numSpacesMoving = finalSpot - initialSpot;
+        }
+        if(getPlayer().piecesAreHome()){
+            if(checkDiceUsage()){
+                removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
+                getPlayer().offBoardPiece(removedPiece);
+                moveIsPossible = true;
+                repaint();
             }
         }
         return moveIsPossible;
@@ -248,12 +233,7 @@ public class Board extends JPanel {
     public void selectedPiece(int initialSpot){
         Piece topOfHits;
         if(initialSpot == -1){
-            if(turn == 1){
-                topOfHits = player1.getHitPieces().get(0);
-            }
-            else{
-                topOfHits = player2.getHitPieces().get(0);
-            }
+            topOfHits = getPlayer().getHitPieces().get(0);
             xOutlinedPiece = topOfHits.getX();
             yOutlinedPiece = topOfHits.getY();
             outlinePiece = true;
@@ -262,22 +242,12 @@ public class Board extends JPanel {
         else {
             if (!stacks.getStacks()[initialSpot].isEmpty()) {
                 Piece topOfStack = (Piece) stacks.getStacks()[initialSpot].peek();
-                if (turn == 1) {
-                    if (topOfStack == player1.movePieceCheck(topOfStack)) {
+                if (topOfStack == getPlayer().movePieceCheck(topOfStack)) {
                         xOutlinedPiece = topOfStack.getX();
                         yOutlinedPiece = topOfStack.getY();
                         outlinePiece = true;
                         repaint();
 
-                    }
-                }
-                if (turn == 2) {
-                    if (topOfStack == player2.movePieceCheck(topOfStack)) {
-                        xOutlinedPiece = topOfStack.getX();
-                        yOutlinedPiece = topOfStack.getY();
-                        outlinePiece = true;
-                        repaint();
-                    }
                 }
             }
         }
@@ -285,34 +255,20 @@ public class Board extends JPanel {
 
     public boolean checkValididtyOfMove(int initialSpot, int finalSpot){ //If the stack meets the requirement for the piece to move there.
         boolean move = false;
-        if(turn == 2) {
-            if (finalSpot - initialSpot == dice1.getFaceValue() || finalSpot - initialSpot == dice2.getFaceValue() || finalSpot - initialSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
-                if (player2.getHitPieces().size() != 0 || (!stacks.getStacks()[initialSpot].isEmpty() && stacks.getStacks()[finalSpot].size() < 5)) {
-                    if (player2.getHitPieces().size() != 0 || stacks.getStacks()[initialSpot].peek() == player2.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
-                        if (finalSpot == 24 || (stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.black) || stacks.getStacks()[finalSpot].size() == 0)  {
-                            numSpacesMoving = finalSpot - initialSpot;
-                                move = true;
-                        }
-                        else if(stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.orange){
-                            numSpacesMoving = finalSpot - initialSpot;
-                                move = true;
-                        }
-                    }
-                }
-            }
+        if(getTurn() == 1){
+            numSpacesMoving = initialSpot - finalSpot;
         }
-        if(turn == 1) {
-            if (initialSpot - finalSpot == dice1.getFaceValue() || initialSpot - finalSpot == dice2.getFaceValue() || initialSpot - finalSpot == (dice2.getFaceValue() + dice1.getFaceValue())) {
-                if (player1.getHitPieces().size() != 0 || (!stacks.getStacks()[initialSpot].isEmpty() && stacks.getStacks()[finalSpot].size() < 5)) {
-                    if (player1.getHitPieces().size() != 0|| stacks.getStacks()[initialSpot].peek() == player1.movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
-                        if (finalSpot == -1 || (stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.orange) || stacks.getStacks()[finalSpot].size() == 0) {
-                            numSpacesMoving = initialSpot - finalSpot;
-                                move = true;
-                        }
-                        else if(stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == Color.black){
-                            numSpacesMoving = initialSpot - finalSpot;
-                                move = true;
-                        }
+        if(getTurn() == 2){
+            numSpacesMoving = finalSpot - initialSpot;
+        }
+        if (getNumSpacesMoving() == dice1.getFaceValue() || getNumSpacesMoving() == dice2.getFaceValue() || getNumSpacesMoving() == (dice2.getFaceValue() + dice1.getFaceValue())) {
+            if (getPlayer().getHitPieces().size() != 0 || (!stacks.getStacks()[initialSpot].isEmpty() && stacks.getStacks()[finalSpot].size() < 5)) {
+                if (getPlayer().getHitPieces().size() != 0 || stacks.getStacks()[initialSpot].peek() == getPlayer().movePieceCheck((Piece) stacks.getStacks()[initialSpot].peek())) {
+                    if (finalSpot == 24 || finalSpot == -1 || (stacks.getStacks()[finalSpot].size() != 0 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() == getPlayer().getPieces()[0].getColour()) || stacks.getStacks()[finalSpot].size() == 0)  {
+                            move = true;
+                    }
+                    else if(stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[finalSpot].peek()).getColour() != getPlayer().getPieces()[0].getColour()){
+                            move = true;
                     }
                 }
             }
@@ -327,17 +283,36 @@ public class Board extends JPanel {
     public boolean checkDiceUsage(){
         if(getNumSpacesMoving() == dice1.getFaceValue() && condition1 && condition3){
             totalNumSpaces -= getNumSpacesMoving();
-            condition1 = false;
+            System.out.println(totalNumSpaces);
+            if(numDoubles < 5 && dice1.getFaceValue() == dice2.getFaceValue()){
+                numDoubles++;
+            }
+            else {
+                condition1 = false;
+            }
             return true;
         }
         else if(getNumSpacesMoving() == dice2.getFaceValue() && condition2 && condition3){
             totalNumSpaces -= getNumSpacesMoving();
-            condition2 = false;
+            System.out.println(totalNumSpaces);
+            if(numDoubles < 5 && dice1.getFaceValue() == dice2.getFaceValue()){
+                numDoubles++;
+            }
+            else {
+                condition2 = false;
+            }
             return true;
         }
         else if(getNumSpacesMoving() == (dice1.getFaceValue() + dice2.getFaceValue()) && condition3 && condition1 && condition2){
             totalNumSpaces -= getNumSpacesMoving();
-            condition3 = false;
+            System.out.println(totalNumSpaces);
+            if(numDoubles < 3 && dice1.getFaceValue() == dice2.getFaceValue()){
+                numDoubles++;
+                numDoubles++;
+            }
+            else {
+                condition3 = false;
+            }
             return true;
         }
         else {
@@ -364,27 +339,27 @@ public class Board extends JPanel {
         condition3 = true;
     }
 
-    public boolean getPlayer1HitPieceStatus(){
-        if(player1.hasHitPiece()){
-            player1HasHitPiece = true;
+    public boolean getPlayerHitPieceStatus(){
+        if(getPlayer().hasHitPiece()){
+            playerHasHitPiece = true;
         }
         else{
-            player1HasHitPiece = false;
+            playerHasHitPiece = false;
         }
-        return player1HasHitPiece;
-    }
-    public boolean getPlayer2HitPieceStatus(){
-        if(player2.hasHitPiece()){
-            player2HasHitPiece = true;
-        }
-        else{
-            player2HasHitPiece = false;
-        }
-        return player2HasHitPiece;
+        return playerHasHitPiece;
     }
 
     public int getTotalNumSpaces(){
         return totalNumSpaces;
+    }
+
+    public Player getPlayer(){
+        if(getTurn() == 1){
+            return player1;
+        }
+        else{
+            return player2;
+        }
     }
 
 
