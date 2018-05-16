@@ -10,23 +10,13 @@ public class Player {
     Color colourOfPieces;
     Piece[] pieces;
     Stack<Piece> hitPieces = new Stack<Piece>();
-    ArrayList<Piece> offBoardPieces = new ArrayList<Piece>();
     boolean pieceOnBoard = true;
-    public Player(Color colourOfPieces, int startingX, int startingY){
+    int numPiecesOffBoard;
+    public Player(Color colourOfPieces){
         this.colourOfPieces = colourOfPieces;
         pieces = new Piece[15];
-        for(int i = 0; i < 15; i++){
-            if(i == 2){
-                startingX -= 550;
-            }
-            if(i == 7){
-                startingX += 200;
-            }
-            if(i == 10){
-                startingX += 100;
-            }
-            pieces[i] = new Piece(startingX, startingY, i, pieceOnBoard, colourOfPieces);
-        }
+        set();
+        numPiecesOffBoard = 0;
 
     }
 
@@ -43,7 +33,7 @@ public class Player {
     public boolean piecesAreHome(){
         int numPiecesHome = 0;
         for(int i = 0; i < 15; i++){
-            if(getPieces()[i].getX() > 400 && getPieces()[i].getX() < 750){
+            if(getPieces()[i].getX() > 400 && getPieces()[i].getX() < 740){
                 numPiecesHome++;
             }
         }
@@ -63,18 +53,13 @@ public class Player {
         for(int i = 0; i < getPieces().length; i++){
             if (getPieces()[i] == piece){
                 getPieces()[i].setOffBoard();
+                numPiecesOffBoard++;
             }
         }
     }
 
     public boolean checkWin() {
-        int numPiecesOffBoard = 0;
-        for (int i = 0; i < 15; i++) {
-            if (!getPieces()[i].onBoard()) {
-                numPiecesOffBoard++;
-            }
-        }
-        if(numPiecesOffBoard == 15){
+        if(getNumPiecesOffBoard() == 15){
             return true;
         }
         else{
@@ -99,6 +84,27 @@ public class Player {
 
     public Piece[] getPieces(){
         return pieces;
+    }
+
+    public void set(){
+        for(int i = 0; i < 15; i++){
+            pieces[i] = new Piece(0, 0, pieceOnBoard, colourOfPieces);
+        }
+
+    }
+
+    public boolean piecesAreClose(int diceFaceValue){
+        boolean canGoOffBoard = true;
+        for(int i = 0; i < 15; i++){
+            if(getPieces()[i].getX() < 710 - (diceFaceValue*50) || getPieces()[i].getX() > 740){
+                canGoOffBoard = false;
+            }
+        }
+        return canGoOffBoard;
+    }
+
+    public int getNumPiecesOffBoard(){
+        return  numPiecesOffBoard;
     }
 
 

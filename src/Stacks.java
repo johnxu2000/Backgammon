@@ -11,6 +11,6 @@ public class Stacks {
     }
     public Stack[] getStacks(){
             return stacks;
-        }
+    }
 }
 

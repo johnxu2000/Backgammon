@@ -14,18 +14,50 @@ public class GameForm{
     private JPanel menuPanel;
     private JButton roll;
     private JButton rules;
+    private JButton newGameButton;
+    private JButton skipTurnButton;
     int numClicks = 0;
     int startingStack, endingStack;
     boolean canMove = false;
     boolean canRoll = true;
+    int numRolls = 0;
+    boolean canSkipTurn = false;
 
     public GameForm(){
+         skipTurnButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(canSkipTurn) {
+                    ((Board) gamePanel).setOutlinedPieceToFalse();
+                    canMove = false;
+                    canRoll = true;
+                    ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
+                }
+            }
+        });
+        newGameButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((Board)gamePanel).start();
+                ((Board) gamePanel).setOutlinedPieceToFalse();
+                canRoll = true;
+                canMove = false;
+                numRolls = 0;
+                ((Board) gamePanel).setConditions();
+
+            }
+        });
         roll.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(canRoll) {
+                    canSkipTurn = true;
                     ((Board) gamePanel).rollDice1();
                     ((Board) gamePanel).rollDice2();
+                    numRolls++;
+                    if(numRolls == 1){
+                        ((Board)gamePanel).chooseTurn();
+                    }
                     canMove = true;
                     canRoll = false;
                 }
@@ -56,6 +88,7 @@ public class GameForm{
                                         endingStack = i;
                                         if (((Board) gamePanel).selectedStack(startingStack, endingStack)) {
                                             if (((Board) gamePanel).getTotalNumSpaces() == 0) {
+                                                canSkipTurn = false;
                                                 canMove = false;
                                                 canRoll = true;
                                                 ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
@@ -88,9 +121,11 @@ public class GameForm{
                                 System.out.println(startingStack);
                                 ((Board) gamePanel).setOutlinedPieceToFalse();
                                 if (((Board) gamePanel).canGoOffBoard(startingStack)) {
-                                    System.out.println(startingStack + "hi");
+                                    if(((Board) gamePanel).winner()){
+                                        canMove = false;
+                                    }
                                     if (((Board) gamePanel).getTotalNumSpaces() == 0) {
-                                        System.out.println("hi");
+                                        canSkipTurn = false;
                                         canMove = false;
                                         canRoll = true;
                                         ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
@@ -133,11 +168,11 @@ public class GameForm{
         rules.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Desktop desktop = null;
+                Desktop desktop;
                 if (Desktop.isDesktopSupported()){
                     desktop = Desktop.getDesktop();
                     try {
-                        desktop.open(new File("/Users/raminakhavan/IdeaProjects/BackgammonProject/res/BackgammonRules.txt"));
+                        desktop.open(new File(getClass().getClassLoader().getResource("BackgammonRules.txt").getFile()));
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -147,7 +182,7 @@ public class GameForm{
     }
 
     public static void main(String[] args){
-        JFrame frame = new JFrame("");
+        JFrame frame = new JFrame("Backgammon");
         GameForm form = new GameForm();
         frame.add(form.backgammonPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

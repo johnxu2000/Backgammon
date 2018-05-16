@@ -10,7 +10,7 @@ public class Piece {
     boolean status; //If the piece is off the board
     Color colour;
 
-    public Piece(int x, int y, int pieceNumber, boolean onBoard, Color colour){
+    public Piece(int x, int y, boolean onBoard, Color colour){
         this.status = onBoard;
         this.x = x;
         this.y = y;

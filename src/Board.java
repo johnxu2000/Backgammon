@@ -9,8 +9,8 @@ public class Board extends JPanel {
     Die dice1 = new Die(340, 540);
     Die dice2 = new Die(410, 540);
     Player player1, player2;
-    Stacks stacks = new Stacks();
     Piece removedPiece, addPiece; //Pieces can be added individually
+    Stacks stacks;
     int startingY, startingX;
     int xOutlinedPiece, yOutlinedPiece;
     boolean outlinePiece = false;
@@ -20,30 +20,10 @@ public class Board extends JPanel {
     boolean condition1 = true;
     boolean condition2 = true;
     boolean condition3 = true;
-    boolean player1HasHitPiece = false;
     boolean playerHasHitPiece = false;
     int numDoubles = 0;
     public Board(){
-        player1 = new Player(Color.orange, startingX, startingY);
-        player2 = new Player(Color.black, startingX, startingY);
-        for(int i = 0; i < 2; i++) { //Putting the pieces on the board at the correct spots
-            stacks.getStacks()[23].push(player1.getPieces()[i]);
-            stacks.getStacks()[0].push(player2.getPieces()[i]);
-
-        }
-        for(int i = 2; i < 7; i++) {
-            stacks.getStacks()[11].push(player2.getPieces()[i]);
-            stacks.getStacks()[12].push(player1.getPieces()[i]);
-        }
-        for(int i = 7; i < 10; i++) {
-            stacks.getStacks()[16].push(player2.getPieces()[i]);
-            stacks.getStacks()[7].push(player1.getPieces()[i]);
-        }
-        for(int i = 10; i < 15; i++) {
-            stacks.getStacks()[5].push(player1.getPieces()[i]);
-            stacks.getStacks()[18].push(player2.getPieces()[i]);
-        }
-        winner();
+        start();
     }
 
     public void paintComponent(Graphics g){
@@ -55,28 +35,24 @@ public class Board extends JPanel {
             if(i > 11) {
                 startingY = 20;
             }
-            else {
+            if(i <= 11) {
                 startingY = 445;
             }
             for(int z = 0; z < stacks.getStacks()[i].size(); z++){
                 Piece p = (Piece) stacks.getStacks()[i].get(z);
+                p.setX(startingX);
                 if(i > 11) {
                     p.setY(startingY += 30);
-                    p.setX(startingX);
                 }
                 else {
                     p.setY(startingY -= 30);
-                    p.setX(startingX);
                 }
 
             }
             if(i > 11) {
                 startingX += 50;
             }
-            else if (i == 11){
-
-            }
-            else {
+            if(i < 11) {
                 startingX -= 50;
             }
         }
@@ -144,6 +120,13 @@ public class Board extends JPanel {
         if(outlinePiece){
             g.drawOval(xOutlinedPiece, yOutlinedPiece, 30, 30);
         }
+        g.drawString(Integer.toString(player1.getNumPiecesOffBoard()), 770, 100);
+        g.drawString(Integer.toString(player2.getNumPiecesOffBoard()), 770, 400);
+        if(winner()){
+            g.setFont(new Font("Serif", Font.BOLD, 150));
+            g.setColor(Color.BLUE);
+            g.drawString("Game Over", 150, 300);
+        }
     }
 
     public void rollDice1(){
@@ -152,6 +135,7 @@ public class Board extends JPanel {
     }
     public void rollDice2(){
         dice2.roll();
+        numDoubles = 0;
         if(dice1.getFaceValue() == dice2.getFaceValue()){
             totalNumSpaces = 2 * (dice1.getFaceValue() + dice2.getFaceValue());
         }
@@ -163,7 +147,6 @@ public class Board extends JPanel {
     public boolean winner() {
         boolean winner = false;
         if(getPlayer().checkWin()){
-            System.out.println("Game Over");
             winner = true;
         }
         return winner;
@@ -179,10 +162,8 @@ public class Board extends JPanel {
             }
             usingHitPiece = true;
         }
-        if(checkValididtyOfMove(initialSpot, finalSpot)) {
-            System.out.println("hi");//Runs after selected piece. This decides if the piece could move to a specific spot the user pointed at.
+        if(checkValididtyOfMove(initialSpot, finalSpot)) {//Runs after selected piece. This decides if the piece could move to a specific spot the user pointed at.
             if(checkDiceUsage()) {
-                System.out.println("hi");
                 moveStatus = true;
                 if (!usingHitPiece && stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
                     hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
@@ -209,6 +190,15 @@ public class Board extends JPanel {
         return moveStatus;
     }
 
+    public Die lowerRolledDie(){
+        if(dice1.getFaceValue() > dice2.getFaceValue()){
+            return dice2;
+        }
+        else{
+            return dice1;
+        }
+    }
+
     public boolean canGoOffBoard(int initialSpot){
         boolean moveIsPossible = false;
         if(getTurn() == 1) {
@@ -220,7 +210,7 @@ public class Board extends JPanel {
             numSpacesMoving = finalSpot - initialSpot;
         }
         if(getPlayer().piecesAreHome()){
-            if(checkDiceUsage()){
+            if(checkDiceUsage() || getPlayer().piecesAreClose(dice1.getFaceValue())){
                 removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                 getPlayer().offBoardPiece(removedPiece);
                 moveIsPossible = true;
@@ -253,6 +243,35 @@ public class Board extends JPanel {
         }
     }
 
+    public void start(){
+        player1 = new Player(Color.ORANGE);
+        player2 = new Player(Color.black);
+        stacks = new Stacks();
+        for(int i = 0; i < stacks.getStacks().length; i++){
+            for(int z = 0; z < stacks.getStacks()[i].size(); z++){
+                stacks.getStacks()[i].remove(z);
+            }
+        }
+        for(int i = 0; i < 2; i++) { //Putting the pieces on the board at the correct spots
+            stacks.getStacks()[23].push(player1.getPieces()[i]);
+            stacks.getStacks()[0].push(player2.getPieces()[i]);
+
+        }
+        for(int i = 2; i < 7; i++) {
+            stacks.getStacks()[11].push(player2.getPieces()[i]);
+            stacks.getStacks()[12].push(player1.getPieces()[i]);
+        }
+        for(int i = 7; i < 10; i++) {
+            stacks.getStacks()[16].push(player2.getPieces()[i]);
+            stacks.getStacks()[7].push(player1.getPieces()[i]);
+        }
+        for(int i = 10; i < 15; i++) {
+            stacks.getStacks()[5].push(player1.getPieces()[i]);
+            stacks.getStacks()[18].push(player2.getPieces()[i]);
+        }
+        repaint();
+    }
+
     public boolean checkValididtyOfMove(int initialSpot, int finalSpot){ //If the stack meets the requirement for the piece to move there.
         boolean move = false;
         if(getTurn() == 1){
@@ -283,7 +302,6 @@ public class Board extends JPanel {
     public boolean checkDiceUsage(){
         if(getNumSpacesMoving() == dice1.getFaceValue() && condition1 && condition3){
             totalNumSpaces -= getNumSpacesMoving();
-            System.out.println(totalNumSpaces);
             if(numDoubles < 5 && dice1.getFaceValue() == dice2.getFaceValue()){
                 numDoubles++;
             }
@@ -294,7 +312,6 @@ public class Board extends JPanel {
         }
         else if(getNumSpacesMoving() == dice2.getFaceValue() && condition2 && condition3){
             totalNumSpaces -= getNumSpacesMoving();
-            System.out.println(totalNumSpaces);
             if(numDoubles < 5 && dice1.getFaceValue() == dice2.getFaceValue()){
                 numDoubles++;
             }
@@ -305,7 +322,6 @@ public class Board extends JPanel {
         }
         else if(getNumSpacesMoving() == (dice1.getFaceValue() + dice2.getFaceValue()) && condition3 && condition1 && condition2){
             totalNumSpaces -= getNumSpacesMoving();
-            System.out.println(totalNumSpaces);
             if(numDoubles < 3 && dice1.getFaceValue() == dice2.getFaceValue()){
                 numDoubles++;
                 numDoubles++;
@@ -362,7 +378,14 @@ public class Board extends JPanel {
         }
     }
 
-
+    public void chooseTurn(){
+        if(dice1.getFaceValue() > dice2.getFaceValue()){
+            turn = 1;
+        }
+        else{
+            turn = 2;
+        }
+    }
     public void setOutlinedPieceToFalse(){
         outlinePiece = false;
         repaint();
