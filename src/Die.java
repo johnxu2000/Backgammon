@@ -1,8 +1,8 @@
 import java.awt.*;
 
 /*
-The dice class is in charge of all the properties of a dice on the board, including its face value and what happens when it gets called to roll.
-It also has teh draw method to display the string face value of the dice
+(Ramin added this) The dice class is in charge of all the properties of a dice on the board, including its face value and what happens when it gets called to roll.
+It also has the draw method to display the string face value of the dice
  */
 
 public class Die

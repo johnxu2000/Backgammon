@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /*
-The Board class draws the dices and pieces at the same time also contains essential algorithms for the game to run. It takes care
+(Mainly Ramin, what John did is stated) The Board class draws the dices and pieces at the same time also contains essential algorithms for the game to run. It takes care
 of the validation of moves and decisions. However, it works hand in hand with the player class to make sure that the
  */
 public class Board extends JPanel {
@@ -24,12 +24,16 @@ public class Board extends JPanel {
     boolean condition2 = true;
     boolean condition3 = true;
     boolean playerHasHitPiece = false;
-    boolean turnChosen = false; //for start of the game, turn is chosen
+    boolean startingTurnChosen = false; //for start of the game, turn is chosen
     boolean turnChange = false;
     String playerTurn; //string representing which player's turn it is
     String playerGoingFirst;
     int numDoubles = 0;
+
     public Board(){
+        player1 = new Player(Color.ORANGE);
+        player2 = new Player(Color.black);
+        stacks = new Stacks();
         start(); //starts the game
     }
 
@@ -82,9 +86,9 @@ public class Board extends JPanel {
             g.drawString(playerTurn, 40, 570);
         }
 
-        if(turnChosen){ //if the first roll is made a player is chosen to go first
+        if(startingTurnChosen){ //if the first roll is made a player is chosen to go first
             g.drawString(playerGoingFirst, 30, 570); //displays what player goes first
-            turnChosen = false;
+            startingTurnChosen = false;
         }
         g.fillRect(820, 20, 150, 550); //draws the area holding the hit pieces
 
@@ -170,12 +174,14 @@ public class Board extends JPanel {
         }
     }
 
+    //John did this method
     //This method rolls the first dice
     public void rollDice1(){
         dice1.roll();
         repaint();
     }
 
+    //John did this method
     //Since the second die is rolled last each time, it rolls teh second die, plus calculates the number of spaces that player can move
     public void rollDice2(){
         dice2.roll();
@@ -204,7 +210,7 @@ public class Board extends JPanel {
     the appropriate stacks if the move is possible. Helper methods are used for the validation of the move and depending on whether a
     hit piece is being used, adjustments are made towards the stack that the hitPieces are in
      */
-    public boolean selectedMoveIsValid(int initialSpot, int finalSpot){
+    public boolean selectedMove(int initialSpot, int finalSpot){
         boolean moveStatus = false;
         boolean usingHitPiece = false; //represents if the piece that it is moving was hit
         Piece hitPiece;
@@ -215,16 +221,16 @@ public class Board extends JPanel {
             }
             usingHitPiece = true;
         }
-        if(checkValididtyOfMove(initialSpot, finalSpot)) {//Runs after selected piece. This decides if the piece could move to a specific spot the user pointed at.
-            if(checkDiceUsage()) { //Checks if the player has not already used the die value
+        if(isValidMove(initialSpot, finalSpot)) {//Runs after selected piece. This decides if the piece could move to a specific spot the user pointed at.
+            if(dieValueIsUsable()) { //Checks if the player has not already used the die value
                 moveStatus = true;
                 //If a regular piece is hitting an opponent's piece the following code runs
                 if (!usingHitPiece && stacks.getStacks()[finalSpot].size() == 1 && ((Piece) stacks.getStacks()[initialSpot].peek()).getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
                     hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
                     //Changes turn to add piece to a stack of hit pieces of the opponent
-                    changeTurn(getTurn());
+                    changeTurn();
                     getPlayer().addHitPiece(hitPiece);
-                    changeTurn(getTurn());
+                    changeTurn();
                 }
                 //If a regular piece is being used, the piece is removed and added to the stacks of the board itself
                 if(!usingHitPiece) {
@@ -237,9 +243,9 @@ public class Board extends JPanel {
                     if (stacks.getStacks()[finalSpot].size() == 1 && getPlayer().hitPieces.peek().getColour() != ((Piece) stacks.getStacks()[finalSpot].peek()).getColour()) {
                         hitPiece = (Piece) stacks.getStacks()[finalSpot].pop();
                         //Changes turn to add piece to a stack of hit pieces of the opponent
-                        changeTurn(getTurn());
+                        changeTurn();
                         getPlayer().addHitPiece(hitPiece);
-                        changeTurn(getTurn());
+                        changeTurn();
                     }
                     removedPiece = getPlayer().getHitPieces().pop();
                     addPiece = (Piece) stacks.getStacks()[finalSpot].push(removedPiece);
@@ -247,16 +253,6 @@ public class Board extends JPanel {
             }
         }
         return moveStatus;
-    }
-
-    //This method returns the dice with the lowered face value (for checking purpose)
-    public Die lowerRolledDie(){
-        if(dice1.getFaceValue() > dice2.getFaceValue()){
-            return dice2;
-        }
-        else{
-            return dice1;
-        }
     }
 
     /*The method gets called when a player wants to take their piece off the board. It goes through checks to see
@@ -274,7 +270,7 @@ public class Board extends JPanel {
         }
         if(getPlayer().piecesAreHome()){ //if all pieces are at the last 6 spots for the player
             //checks to see if the die value has not been used yet, or if the player's pieces are close enough the player can remove a piece if they don't have a piece in the spot equal to the die value
-            if(checkDiceUsage() || getPlayer().piecesAreClose(lowerRolledDie().getFaceValue())){
+            if(dieValueIsUsable()){
                 removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                 getPlayer().offBoardPiece(removedPiece); //player keeps track of pieces off board
                 moveIsPossible = true;
@@ -291,16 +287,16 @@ public class Board extends JPanel {
      */
     public void selectedPiece(int initialSpot){
         Piece topOfHits;
-        if(initialSpot == -1){
-            topOfHits = getPlayer().getHitPieces().get(0);
+        if(initialSpot == -1){ //if hit piece
+            topOfHits = getPlayer().getHitPieces().get(0); //outlines the top of the stack piece
             xOutlinedPiece = topOfHits.getX();
             yOutlinedPiece = topOfHits.getY();
             outlinePiece = true;
             repaint();
         }
-        else {
+        else { //if not a hit piece
             if (!stacks.getStacks()[initialSpot].isEmpty()) {
-                Piece topOfStack = (Piece) stacks.getStacks()[initialSpot].peek();
+                Piece topOfStack = (Piece) stacks.getStacks()[initialSpot].peek(); //outlines the top of the stack piece
                 if (topOfStack == getPlayer().movePieceCheck(topOfStack)) {
                         xOutlinedPiece = topOfStack.getX();
                         yOutlinedPiece = topOfStack.getY();
@@ -317,10 +313,10 @@ public class Board extends JPanel {
     stacks, so that when they are drawn it will look like the game has restarted
      */
     public void start(){
-        player1 = new Player(Color.ORANGE);
-        player2 = new Player(Color.black);
-        stacks = new Stacks();
 
+        player1.set();
+        player2.set();
+        stacks = new Stacks();
         //The loop empties the stacks
         for(int i = 0; i < stacks.getStacks().length; i++){
             for(int z = 0; z < stacks.getStacks()[i].size(); z++){
@@ -353,7 +349,7 @@ public class Board extends JPanel {
     this code has become efficient in teh sense that the if statements no longer have to be duplicated for two turns and are instead checked through
     once. The method also checks to see if a hit piece can move
      */
-    public boolean checkValididtyOfMove(int initialSpot, int finalSpot){ //If the stack meets the requirement for the piece to move there.
+    public boolean isValidMove(int initialSpot, int finalSpot){ //If the stack meets the requirement for the piece to move there.
         boolean move = false;
         if(getTurn() == 1){
             numSpacesMoving = initialSpot - finalSpot;
@@ -389,7 +385,7 @@ public class Board extends JPanel {
     also does this for doubles, but instead of being used once, die values can be used twice. If the die value can be used, the total sum of spaces
     that the player can move is subtracted by the move that is currently taking place
      */
-    public boolean checkDiceUsage(){
+    public boolean dieValueIsUsable(){
 
         //If die one has not been used or has not been used twice (for doubles)
         if(getNumSpacesMoving() == dice1.getFaceValue() && condition1 && condition3){
@@ -409,7 +405,7 @@ public class Board extends JPanel {
                 numDoubles++;
             }
             else {
-                condition2 = false; //dice 2 face value can not be used
+                condition2 = false; //dice 2 face value cannot be used
             }
             return true;
         }
@@ -436,8 +432,8 @@ public class Board extends JPanel {
     }
 
     //This method changes the turn, depending on what the current turn is
-    public void changeTurn(int currentTurn){
-        if (currentTurn == 1){
+    public void changeTurn(){
+        if (getTurn() == 1){
             turn = 2;
             playerTurn = "Player 2's Turn";
         }
@@ -471,6 +467,7 @@ public class Board extends JPanel {
         return spacesLeftToMove;
     }
 
+
     //Returns the player that is currently playing
     public Player getPlayer(){
         if(getTurn() == 1){
@@ -481,12 +478,13 @@ public class Board extends JPanel {
         }
     }
 
+    //John did this method
     /*This method is called at the beginning of a game, after the first roll. it is responsible for determining what player goes first,
      depending on the dice values (dice1 > dice2 or vice versa). If the dices are equal, odd doubles mean that player 2 goes first and even doubles means that player
      1 goes first
      */
-    public void chooseTurn(){
-        turnChosen = true;
+    public void chooseStartingTurn(){
+        startingTurnChosen = true;
         if(dice1.getFaceValue() > dice2.getFaceValue() || (dice1.getFaceValue() == dice2.getFaceValue() && dice1.getFaceValue() % 2 == 0)){
             playerGoingFirst = "Player 1 Goes First! Roll the Die to start your turn!";
             turn = 1;
@@ -495,6 +493,7 @@ public class Board extends JPanel {
             playerGoingFirst = "Player 2 Goes First! Roll the Die to start your turn!";
             turn = 2;
         }
+        turnChange = false;
         repaint();
     }
 

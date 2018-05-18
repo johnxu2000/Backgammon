@@ -1,6 +1,6 @@
 import java.awt.*;
 /*
-The player class controls the pieces. The player is able to place the pieces on the correct spots and check which moves they have made
+(Mainly John, what Ramin did is stated) - The player class controls the pieces. The player is able to place the pieces on the correct spots and check which moves they have made
 in order for the Board class to draw them properly. The player is in charge of all the attributes that are individually important for
 each player
  */
@@ -17,10 +17,10 @@ public class Player {
         this.colourOfPieces = colourOfPieces;
         pieces = new Piece[15];
         set(); //sets up the game from the player's view
-        numPiecesOffBoard = 0;
 
     }
 
+    //Ramin did this method
     /*
     Checks if the moving piece is one of the player's pieces and if so it returns the Piece that is being moved
      */
@@ -34,8 +34,9 @@ public class Player {
         return movingPiece;
     }
 
+    //Ramin did this method
     //If all of the players pieces are in the home quarter of the board, then they can start moving their pieces off the board
-    //This method checks this ability
+    //This method checks this ability (special feature)
     public boolean piecesAreHome(){
         int numPiecesHome = 0;
         for(int i = 0; i < 15; i++){
@@ -66,7 +67,7 @@ public class Player {
         }
     }
 
-    //This method checks to see if the player has won, depending on if all 15 of teh player's pieces are off the board
+    //This method checks to see if the player has won, depending on if all 15 of the player's pieces are off the board
     public boolean checkWin() {
         if(getNumPiecesOffBoard() == 15){
             return true;
@@ -101,21 +102,8 @@ public class Player {
         for(int i = 0; i < 15; i++){
             pieces[i] = new Piece(pieceOnBoard, colourOfPieces);
         }
+        numPiecesOffBoard = 0;
 
-    }
-
-    /*
-   Checks to see if there are pieces that are lower than the lowest dice value. This way the player can start taking
-   off pieces that are closer to the board because they don't have pieces that are farther away from the ending point
-     */
-    public boolean piecesAreClose(int diceFaceValue){
-        boolean canGoOffBoard = true;
-        for(int i = 0; i < 15; i++){
-            if(getPieces()[i].getX() < 710 - (diceFaceValue*50) || getPieces()[i].getX() > 740){ //checks using coordinates of the pieces
-                canGoOffBoard = false;
-            }
-        }
-        return canGoOffBoard;
     }
 
     //returns number of pieces off the board

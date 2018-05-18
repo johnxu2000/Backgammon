@@ -1,5 +1,5 @@
 /*
-The driver class that contains the UI and listeners necessary for selected stacks, hitpiece etc. to function correctly.
+(Mainly Ramin, what John did is stated) - The driver class that contains the UI and listeners necessary for selected stacks, hitpiece etc. to function correctly.
 It is used to call functions or perform tasks when buttons or the mouse preforms an action
  */
 
@@ -78,6 +78,7 @@ public class GameForm{
 
         //When the skip turn button is clicked, it will see if the player can skip the turn and if so, it changes the turn of the players
         //Essentially, it restarts the turn, but whatever player clicked the skip turn button means that the other player gets to play now
+        //This button is significant in the sense that players that can't move have to click it for the game to go on
          skipTurnButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,12 +86,12 @@ public class GameForm{
                     ((Board) gamePanel).setOutlinedPieceToFalse(); //doesn't outline a piece
                     canMove = false;
                     canRoll = true;
-                    ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn()); //turn change
-                    ((Board) gamePanel).setConditions();
+                    ((Board) gamePanel).changeTurn(); //turn change
 
                 }
             }
         });
+
 
          /*
          When the new game button is called, the Board restarts and the menu panel returns to its original state
@@ -103,8 +104,10 @@ public class GameForm{
                 canRoll = true;
                 canMove = false;
                 numRolls = 0; //restarts number of rolls in a single game
-                ((Board) gamePanel).setConditions(); //checking conditions go back to originak state
+                ((Board) gamePanel).setConditions(); //checking conditions go back to original state
                 //Radiobuttons are set to be visible if players want to switch colours of pieces before game starts
+                orangeRadioButton.setSelected(true);
+                blackRadioButton.setSelected(true);
                 orangeRadioButton.setVisible(true);
                 blueRadioButton.setVisible(true);
                 magentaRadioButton.setVisible(true);
@@ -117,6 +120,7 @@ public class GameForm{
             }
         });
 
+        //John did this method
         /*
         The roll button is in charge of choosing who goes first after the first roll and starting the turn of each player
         when it is clicked and the dice values are shown
@@ -130,7 +134,7 @@ public class GameForm{
                     ((Board) gamePanel).rollDice2(); //rolls second dice
                     numRolls++;
                     if(numRolls == 1){ //if it is the start
-                        ((Board)gamePanel).chooseTurn(); //chooses turn
+                        ((Board)gamePanel).chooseStartingTurn(); //chooses turn
                     }
                     else {
                         canMove = true;
@@ -182,14 +186,14 @@ public class GameForm{
                                         endingStack = i; //ending stack is set to the latest click
 
                                         //if the move is valid
-                                        if (((Board) gamePanel).selectedMoveIsValid(startingStack, endingStack)) {
+                                        if (((Board) gamePanel).selectedMove(startingStack, endingStack)) {
 
                                             //If the turn is complete (all spaces that the player is allowed to move are used
                                             if (((Board) gamePanel).getSpacesLeftToMove() == 0) {
                                                 canSkipTurn = false;
                                                 canMove = false; //next player cannot move pieces until rolling the dice
                                                 canRoll = true; //next player has to roll
-                                                ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn()); //changes turn
+                                                ((Board) gamePanel).changeTurn(); //changes turn
                                                 ((Board) gamePanel).setConditions(); //sets checking conditions back to original state
                                             }
                                             numClicks = 0; //if player has not completed turn
@@ -235,7 +239,7 @@ public class GameForm{
                                     if (((Board) gamePanel).getSpacesLeftToMove() == 0) {
                                         canMove = false;
                                         canRoll = true;
-                                        ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn()); //change turn
+                                        ((Board) gamePanel).changeTurn(); //change turn
                                         ((Board) gamePanel).setConditions(); //reset conditions
                                     }
 
@@ -272,6 +276,7 @@ public class GameForm{
             }
         });
 
+        //John did this method
         /*
         If the rules button is clicked, a text file opens up and the reader can read the rules of the game
          */
@@ -282,7 +287,7 @@ public class GameForm{
                 if (Desktop.isDesktopSupported()){
                     desktop = Desktop.getDesktop();
                     try {
-                        File file = new File(getClass().getClassLoader().getResource("BackgammonRules.txt").getFile());
+                        File file = new File(getClass().getClassLoader().getResource("BackgammonRules.txt").getFile()); //Ramin fixed it a bit
                         file.setWritable(false, false); //prevents the reader from changing the rules
                         file.setExecutable(false);
                         desktop.open(file); //physically opens the file when the button is clicked
@@ -314,6 +319,7 @@ public class GameForm{
         }
     }
 
+    //John did the main method
     /*
     Driver - It sets the content to visible, sets the preferences of the the frame and creates the gameForm
      */
@@ -328,6 +334,7 @@ public class GameForm{
         frame.setPreferredSize(new Dimension(1000, 600));
     }
 
+    //John did this method
     //gamePanel is used to represent the board class
     private void createUIComponents() {
         // TODO: place custom component creation code here
