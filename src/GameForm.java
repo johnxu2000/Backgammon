@@ -86,6 +86,8 @@ public class GameForm{
                     canMove = false;
                     canRoll = true;
                     ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn()); //turn change
+                    ((Board) gamePanel).setConditions();
+
                 }
             }
         });
@@ -180,10 +182,10 @@ public class GameForm{
                                         endingStack = i; //ending stack is set to the latest click
 
                                         //if the move is valid
-                                        if (((Board) gamePanel).selectedStack(startingStack, endingStack)) {
+                                        if (((Board) gamePanel).selectedMoveIsValid(startingStack, endingStack)) {
 
                                             //If the turn is complete (all spaces that the player is allowed to move are used
-                                            if (((Board) gamePanel).getTotalNumSpaces() == 0) {
+                                            if (((Board) gamePanel).getSpacesLeftToMove() == 0) {
                                                 canSkipTurn = false;
                                                 canMove = false; //next player cannot move pieces until rolling the dice
                                                 canRoll = true; //next player has to roll
@@ -230,7 +232,7 @@ public class GameForm{
                                     }
 
                                     //If the player has finished their trun
-                                    if (((Board) gamePanel).getTotalNumSpaces() == 0) {
+                                    if (((Board) gamePanel).getSpacesLeftToMove() == 0) {
                                         canMove = false;
                                         canRoll = true;
                                         ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn()); //change turn

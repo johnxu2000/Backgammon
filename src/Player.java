@@ -81,7 +81,7 @@ public class Player {
         return hitPieces;
     }
 
-    //Returns a boolean depending on whether teh player has an pieces that were hit
+    //Returns a boolean depending on whether the player has an pieces that were hit
     public boolean hasHitPiece(){
         if(hitPieces.size() != 0){
             return true;

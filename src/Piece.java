@@ -15,6 +15,8 @@ public class Piece {
         this.status = onBoard;
         this.colour = colour;
     }
+
+    //draws the piece
     public void draw(Graphics g){
         if(onBoard()) {
             g.setColor(colour);
@@ -22,30 +24,39 @@ public class Piece {
         }
     }
 
+    //Returns if the piece is on the board
     public boolean onBoard(){
         return status;
     }
 
+    //sets the on/off board status of the piece
     public void setOffBoard(){
         status = false;
     }
 
+    //Sets the x coordinate when drawing the piece
     public void setX(int x) {
         this.x = x;
     }
+    //Sets the y coordinate when drawing the piece
     public void setY(int y){
         this.y = y;
     }
 
+    //gets the x coordinate of the piece
     public int getX(){
         return x;
     }
+
+    //gets the y coordinate of the piece
     public int getY(){ return y; }
 
+    //Returns the colour of the piece
     public Color getColour() {
         return colour;
     }
 
+    //sets the colour of the piece is the player changed the colour
     public void setColour(Color pieceColours){
         colour = pieceColours;
     }
