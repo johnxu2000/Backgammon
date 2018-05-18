@@ -12,6 +12,7 @@ public class Player {
     Stack<Piece> hitPieces = new Stack<Piece>();
     boolean pieceOnBoard = true;
     int numPiecesOffBoard;
+    int score = 0;
     public Player(Color colourOfPieces){
         this.colourOfPieces = colourOfPieces;
         pieces = new Piece[15];
@@ -105,6 +106,20 @@ public class Player {
 
     public int getNumPiecesOffBoard(){
         return  numPiecesOffBoard;
+    }
+
+    public void setColourOfPieces(Color colour){
+        for(int i = 0; i < getPieces().length; i++){
+            getPieces()[i].setColour(colour);
+        }
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public void addPoint(){
+        score++;
     }
 
 

@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="8f331" binding="menuPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="8f331" binding="menuPanel" layout-manager="GridLayoutManager" row-count="13" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -30,7 +30,7 @@
           </component>
           <component id="307a5" class="javax.swing.JButton" binding="rules">
             <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Rules"/>
@@ -52,6 +52,77 @@
               <text value="Skip Turn"/>
             </properties>
           </component>
+          <component id="353d5" class="javax.swing.JLabel" binding="player1Colours">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Player1 Colour of Pieces:"/>
+            </properties>
+          </component>
+          <component id="1f5c3" class="javax.swing.JRadioButton" binding="orangeRadioButton" default-binding="true">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <selected value="true"/>
+              <text value="Orange"/>
+            </properties>
+          </component>
+          <component id="2966e" class="javax.swing.JRadioButton" binding="yellowRadioButton" default-binding="true">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Yellow"/>
+            </properties>
+          </component>
+          <component id="4307f" class="javax.swing.JRadioButton" binding="magentaRadioButton" default-binding="true">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Magenta"/>
+            </properties>
+          </component>
+          <vspacer id="6e8ea">
+            <constraints>
+              <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="7b956" class="javax.swing.JLabel" binding="player2Colours">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Player2 Colour of Pieces:"/>
+            </properties>
+          </component>
+          <component id="e10e8" class="javax.swing.JRadioButton" binding="blackRadioButton" default-binding="true">
+            <constraints>
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <selected value="true"/>
+              <text value="Black"/>
+            </properties>
+          </component>
+          <component id="927c1" class="javax.swing.JRadioButton" binding="blueRadioButton" default-binding="true">
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Blue"/>
+            </properties>
+          </component>
+          <component id="25fb8" class="javax.swing.JRadioButton" binding="cyanRadioButton" default-binding="true">
+            <constraints>
+              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Cyan"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="c0d9e" binding="gamePanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -69,4 +140,16 @@
       </grid>
     </children>
   </grid>
+  <buttonGroups>
+    <group name="player2ColoursGroup">
+      <member id="927c1"/>
+      <member id="e10e8"/>
+      <member id="25fb8"/>
+    </group>
+    <group name="player1ColoursGroup">
+      <member id="1f5c3"/>
+      <member id="2966e"/>
+      <member id="4307f"/>
+    </group>
+  </buttonGroups>
 </form>

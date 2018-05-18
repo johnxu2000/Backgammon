@@ -16,6 +16,14 @@ public class GameForm{
     private JButton rules;
     private JButton newGameButton;
     private JButton skipTurnButton;
+    private JRadioButton orangeRadioButton;
+    private JRadioButton yellowRadioButton;
+    private JRadioButton magentaRadioButton;
+    private JRadioButton blackRadioButton;
+    private JRadioButton blueRadioButton;
+    private JRadioButton cyanRadioButton;
+    private JLabel player2Colours;
+    private JLabel player1Colours;
     int numClicks = 0;
     int startingStack, endingStack;
     boolean canMove = false;
@@ -24,6 +32,42 @@ public class GameForm{
     boolean canSkipTurn = false;
 
     public GameForm(){
+        orangeRadioButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setColour(Color.orange);
+            }
+        });
+        magentaRadioButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setColour(Color.magenta);
+            }
+        });
+        yellowRadioButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setColour(Color.yellow);
+            }
+        });
+        blackRadioButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setColour(Color.black);
+            }
+        });
+        blueRadioButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setColour(Color.blue);
+            }
+        });
+        cyanRadioButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setColour(Color.cyan);
+            }
+        });
          skipTurnButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,6 +88,14 @@ public class GameForm{
                 canMove = false;
                 numRolls = 0;
                 ((Board) gamePanel).setConditions();
+                orangeRadioButton.setVisible(true);
+                blueRadioButton.setVisible(true);
+                magentaRadioButton.setVisible(true);
+                blackRadioButton.setVisible(true);
+                yellowRadioButton.setVisible(true);
+                cyanRadioButton.setVisible(true);
+                player1Colours.setVisible(true);
+                player2Colours.setVisible(true);
 
             }
         });
@@ -58,8 +110,10 @@ public class GameForm{
                     if(numRolls == 1){
                         ((Board)gamePanel).chooseTurn();
                     }
-                    canMove = true;
-                    canRoll = false;
+                    else {
+                        canMove = true;
+                        canRoll = false;
+                    }
                 }
             }
         });
@@ -118,19 +172,19 @@ public class GameForm{
                         }
                         if(e.getX() > 750 && e.getX() < 800){
                             if(e.getY() > 50 && e.getY() < 450){
-                                System.out.println(startingStack);
                                 ((Board) gamePanel).setOutlinedPieceToFalse();
                                 if (((Board) gamePanel).canGoOffBoard(startingStack)) {
                                     if(((Board) gamePanel).winner()){
                                         canMove = false;
                                     }
                                     if (((Board) gamePanel).getTotalNumSpaces() == 0) {
-                                        canSkipTurn = false;
                                         canMove = false;
                                         canRoll = true;
                                         ((Board) gamePanel).changeTurn(((Board) gamePanel).getTurn());
                                         ((Board) gamePanel).setConditions();
                                     }
+                                    numClicks = 0;
+                                    canSkipTurn = false;
                                 }
                             }
                         }
@@ -172,13 +226,32 @@ public class GameForm{
                 if (Desktop.isDesktopSupported()){
                     desktop = Desktop.getDesktop();
                     try {
-                        desktop.open(new File(getClass().getClassLoader().getResource("BackgammonRules.txt").getFile()));
+                        File file = new File(getClass().getClassLoader().getResource("BackgammonRules.txt").getFile());
+                        file.setWritable(false, false);
+                        file.setExecutable(false);
+                        desktop.open(file);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 }
             }
         });
+    }
+
+    public void setColour(Color colour){
+        if(numRolls == 0) {
+            ((Board) gamePanel).setColour(colour);
+        }
+        else{
+            orangeRadioButton.setVisible(false);
+            blueRadioButton.setVisible(false);
+            magentaRadioButton.setVisible(false);
+            blackRadioButton.setVisible(false);
+            yellowRadioButton.setVisible(false);
+            cyanRadioButton.setVisible(false);
+            player1Colours.setVisible(false);
+            player2Colours.setVisible(false);
+        }
     }
 
     public static void main(String[] args){

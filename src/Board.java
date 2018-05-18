@@ -21,6 +21,8 @@ public class Board extends JPanel {
     boolean condition2 = true;
     boolean condition3 = true;
     boolean playerHasHitPiece = false;
+    boolean turnChosen = false;
+    String playerGoingFirst;
     int numDoubles = 0;
     public Board(){
         start();
@@ -58,6 +60,13 @@ public class Board extends JPanel {
         }
         g.fillRect(100, 50, 700, 400);
         g.setColor(Color.white);
+        g.drawString("Scoreboard: ", 650, 500);
+        g.drawString("Player 1: "+ Integer.toString(player1.getScore()), 650, 530);
+        g.drawString("Player 2: "+ Integer.toString(player2.getScore()), 650, 560);
+        if(turnChosen){
+            g.drawString(playerGoingFirst, 30, 570);
+            turnChosen = false;
+        }
         g.fillRect(820, 20, 150, 550);
         x1 = 750;
         x2 = 700;
@@ -120,8 +129,8 @@ public class Board extends JPanel {
         if(outlinePiece){
             g.drawOval(xOutlinedPiece, yOutlinedPiece, 30, 30);
         }
-        g.drawString(Integer.toString(player1.getNumPiecesOffBoard()), 770, 100);
-        g.drawString(Integer.toString(player2.getNumPiecesOffBoard()), 770, 400);
+        g.drawString(Integer.toString(player2.getNumPiecesOffBoard()), 770, 100);
+        g.drawString(Integer.toString(player1.getNumPiecesOffBoard()), 770, 400);
         if(winner()){
             g.setFont(new Font("Serif", Font.BOLD, 150));
             g.setColor(Color.BLUE);
@@ -147,6 +156,7 @@ public class Board extends JPanel {
     public boolean winner() {
         boolean winner = false;
         if(getPlayer().checkWin()){
+            getPlayer().addPoint();
             winner = true;
         }
         return winner;
@@ -210,7 +220,7 @@ public class Board extends JPanel {
             numSpacesMoving = finalSpot - initialSpot;
         }
         if(getPlayer().piecesAreHome()){
-            if(checkDiceUsage() || getPlayer().piecesAreClose(dice1.getFaceValue())){
+            if(checkDiceUsage() || getPlayer().piecesAreClose(lowerRolledDie().getFaceValue())){
                 removedPiece = (Piece) stacks.getStacks()[initialSpot].pop();
                 getPlayer().offBoardPiece(removedPiece);
                 moveIsPossible = true;
@@ -379,15 +389,28 @@ public class Board extends JPanel {
     }
 
     public void chooseTurn(){
-        if(dice1.getFaceValue() > dice2.getFaceValue()){
+        turnChosen = true;
+        if(dice1.getFaceValue() > dice2.getFaceValue() || (dice1.getFaceValue() == dice2.getFaceValue() && dice1.getFaceValue() % 2 == 0)){
+            playerGoingFirst = "Player 1 Goes First! Roll the Die to start your turn!";
             turn = 1;
         }
         else{
+            playerGoingFirst = "Player 2 Goes First! Roll the Die to start your turn!";
             turn = 2;
         }
+        repaint();
     }
     public void setOutlinedPieceToFalse(){
         outlinePiece = false;
+        repaint();
+    }
+    public void setColour(Color colour){
+        if(colour == Color.black || colour == Color.blue || colour == Color.cyan) {
+            player2.setColourOfPieces(colour);
+        }
+        else{
+            player1.setColourOfPieces(colour);
+        }
         repaint();
     }
 }

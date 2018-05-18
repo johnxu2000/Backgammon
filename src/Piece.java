@@ -47,4 +47,8 @@ public class Piece {
     public Color getColour() {
         return colour;
     }
+
+    public void setColour(Color pieceColours){
+        colour = pieceColours;
+    }
 }
