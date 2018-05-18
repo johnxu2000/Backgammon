@@ -10,5 +10,8 @@ Hitting and Entering:
 If a single checker of either color is located on a point, that is known as a blot. If your checker lands on an opponent’s blot, the opponent’s checker is removed from the board and placed on the "hitpieces" area.
 The opponent cannot make any other move until they they their piece from the "hitpieces" area back onto the board by doing the steps mentioned in "Taking Turns".
 
+Taking Pieces Off Board:
+If a player has all their pieces in their home (last 6 spots), the player can click the brown square next to their home as their ending zone. The brown square is like another spot on the board, so if the dice value fits the number of spaces that the player wants to move, the move will be valid, but if it doesn't fit the dice value, the player will have to keep skipping their turn and continuing to roll until the dice value fits the piece that they want to move (one of the versions of backgammon). This version of backgammon often takes a bit longer than other versions.
+
 Note:  - A piece is de-selected if the move the player has issued is invalid.
        - No moves can be made unless the dice has been rolled.
