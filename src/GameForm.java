@@ -1,5 +1,6 @@
 /*
 The driver class that contains the UI and listeners necessary for selected stacks, hitpiece etc. to function correctly.
+It is used to call functions or perform tasks when buttons or the mouse preforms an action
  */
 
 import javax.swing.*;

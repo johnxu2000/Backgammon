@@ -1,5 +1,9 @@
 import java.awt.*;
 
+/*
+The dice class is in charge of all the properties of a dice on the board, including its face value and what happens when it gets called to roll.
+It also has teh draw method to display the string face value of the dice
+ */
 
 public class Die
 {
@@ -14,6 +18,7 @@ public class Die
         upperY = y;
     }
 
+    //Used to show the string face value of the dice on the board
     public void draw(Graphics page)
     {
         Graphics2D g2d = (Graphics2D) page;
@@ -76,6 +81,8 @@ public class Die
 
         return sFaceValue;
     }
+
+    //Converts the integer face value to a string
     public String toString()
     {
         String result = Integer.toString(faceValue);
